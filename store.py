@@ -6,16 +6,20 @@ Updated:    10/13/2024
 from product import *
 
 class Store:
-    def __init__(self, name: str, description: str):
+    def __init__(self, name: str, description: str, square_feet: int):
         self.name = name
         self.description = description
+        self.square_feet = square_feet
 
     def __str__(self):
         return self.name
 
+    def get_description(self):
+        return self.description
+
 class RetailStore(Store):
-    def __init__(self, name: str, description: str):
-        super().__init__(name, description)
+    def __init__(self, name: str, description: str, sqr_feet: int):
+        super().__init__(name, description, sqr_feet)
         self.catalog = []
 
     def __str__(self):
@@ -34,8 +38,8 @@ class RetailStore(Store):
         print("-" * 20)
 
 class ServiceStore(Store):
-    def __init__(self, name: str, description: str):
-        super().__init__(name, description)
+    def __init__(self, name: str, description: str, sqr_feet: int):
+        super().__init__(name, description, sqr_feet)
         self.catalog = []
 
     def add_service(self, service: Service):
@@ -51,8 +55,8 @@ class ServiceStore(Store):
         print("-" * 20)
 
 class ComboStore(Store):
-    def __init__(self, name: str, description: str):
-        super().__init__(name, description)
+    def __init__(self, name: str, description: str, sqr_feet: int):
+        super().__init__(name, description, sqr_feet)
         self.item_catalog = []
         self.service_catalog = []
 
