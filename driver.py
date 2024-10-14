@@ -6,18 +6,22 @@ Updated:    10/13/2024
 
 from product import *
 from store import *
+from mall import Mall
 import time
 
 run_program = True
+
+#Beginning of Program - Get the Mall Name
 print("\nWelcome to your very own Mall Planner! Add stores, items, and more!")
 mall_name = input("\nFirst, let's start off with a name! It needs to be something catchy.\t")
+user_mall = Mall(mall_name)
 print("\nHmm.", end = "")
 
 for i in range(0, 3):
     time.sleep(0.75)
     print(".", end = "")
 
-print("\n\n" + mall_name + ", eh? That sounds great! Let's begin:")
+print("\n\n" + str(user_mall) + ", eh? That sounds great! Let's begin:")
 
 while run_program:
 
@@ -30,6 +34,8 @@ while run_program:
     match user_option:
         case 1:
             pass
+
+
         case 2:
             pass
         case 3:
