@@ -40,6 +40,9 @@ class Item(Product):
     def change_price(self, new_price):
         self.price = new_price
 
+"""
+Service Class - Service that has timeslots and can be booked
+"""
 class Service(Product):
     def __init__(self, name: str, description, price: float):
         super().__init__(name, description)
@@ -66,3 +69,6 @@ class Service(Product):
             self.time_slots.insert(index-1, time_slot)
 
         self.slots += 1
+
+    def remove_timeslot(self, index):       #Returns and removes the timeslot so that it can be added elsewhere.
+        return self.time_slots.pop(index)
