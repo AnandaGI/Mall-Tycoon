@@ -43,11 +43,15 @@ class Item(Product):
 Service Class - Service that has timeslots and can be booked
 """
 class Service(Product):
-    def __init__(self, name: str, description, price: float):
+    def __init__(self, name: str, description, price: float, time_slots = None):
         super().__init__(name, description)
         self.price = price
-        self.time_slots = []
         self.slots = 0
+
+        if time_slots is None:
+            self.time_slots = []
+        else:
+            self.time_slots = time_slots
 
     def change_price(self, price):
         self.price = price
@@ -71,3 +75,23 @@ class Service(Product):
 
     def remove_timeslot(self, index):       #Returns and removes the timeslot so that it can be added elsewhere.
         return self.time_slots.pop(index)
+
+
+"""
+Product Functions
+"""
+def create_product():
+    product_name = input("\nWhat is your new product's name?\t")
+    product_description = input("Give a short description of your product (Press ENTER for none):\t")
+    product_type = int(input("Is your product an item or a service?\t"))
+    product_price = float(input("What is your product's price:\t"))
+    while product_type < 1 or product_type > 2:
+        product_type = input("\nInvalid option. Is your product an item or a service?\t")
+
+    if product_type == 1:
+        item_quantity = int(input("How much stock does this item have? Must be positive integer:\t"))
+        return Item(product_name, product_description, item_quantity, product_price)
+
+    else:
+        #Include a function here to read in a list of timeslots from a file
+        return Service(product_name, product_description, product_price)
