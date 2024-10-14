@@ -1,7 +1,7 @@
 """
 Creator:    Ananda Irwin
 Purpose:    Create product classes for use in stores.
-Updated:    10/13/2024
+Updated:    10/14/2024
 """
 
 """

@@ -1,7 +1,7 @@
 """
 Creator:    Ananda Irwin
 Purpose:    Create stores, which sell items, services, or both
-Updated:    10/13/2024
+Updated:    10/14/2024
 """
 from product import *
 
