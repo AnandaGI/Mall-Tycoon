@@ -62,7 +62,7 @@ class Service(Product):
                 print(str(i+1) + ")\t" + self.time_slots[i])
 
             index = int(input("Where would you like to insert this time?\t"))
-            while 1 < index <= self.slots:
+            while self.slots < index < 1:
                 index = int(input("Invalid index. Where would you like to insert this time?\t"))
 
             self.time_slots.insert(index-1, time_slot)
