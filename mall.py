@@ -4,7 +4,7 @@ Purpose:    Create stores, which sell items, services, or both
 Updated:    10/14/2024
 """
 
-from store import Store
+from store import Plot
 
 class Mall:
     def __init__(self, name):
@@ -15,8 +15,8 @@ class Mall:
     def __str__(self):
         return self.name
 
-    def add_store(self, store: Store):
-        self.store_list.append(store)
+    def add_store(self, plot: Plot):
+        self.store_list.append(plot)
         self.num_stores += 1
 
     def get_num_stores(self):

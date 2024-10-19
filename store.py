@@ -5,7 +5,7 @@ Updated:    10/14/2024
 """
 from product import *
 
-class Store:
+class Plot:
     def __init__(self, name: str, description: str, square_feet: int):
         self.name = name
         self.description = description
@@ -23,7 +23,10 @@ class Store:
     def set_description(self, new_description: str):
         self.description = new_description
 
-class RetailStore(Store):
+"""
+Retail Store - sells Items exclusively
+"""
+class RetailStore(Plot):
     def __init__(self, name: str, description: str, sqr_feet: int):
         super().__init__(name, description, sqr_feet)
         self.catalog = []
@@ -35,7 +38,7 @@ class RetailStore(Store):
         if isinstance(item, Item):
             self.catalog.append(item)
         else:
-            print("Cannot add a service to an retail store.")
+            print("Cannot add a service to a catalog of items.")
 
     def display_catalog(self):
         print("\n" + self.name + "'s Product Page\n" + ("-" * 20))
@@ -46,7 +49,10 @@ class RetailStore(Store):
 
         print("-" * 20)
 
-class ServiceStore(Store):
+"""
+Service Store - sells Services exclusively
+"""
+class ServiceStore(Plot):
     def __init__(self, name: str, description: str, sqr_feet: int):
         super().__init__(name, description, sqr_feet)
         self.catalog = []
@@ -66,7 +72,10 @@ class ServiceStore(Store):
 
         print("-" * 20)
 
-class ComboStore(Store):
+"""
+Combo Store - sells both services and items
+"""
+class ComboStore(Plot):
     def __init__(self, name: str, description: str, sqr_feet: int):
         super().__init__(name, description, sqr_feet)
         self.item_catalog = []
@@ -104,3 +113,18 @@ class ComboStore(Store):
 
         if len(self.item_catalog) > 0 and len(self.service_catalog) > 0:
             print("No products to display.")
+
+"""
+Restaurant - has a limited capacity and a menu of food items
+"""
+class Restaurant(RetailStore):
+    def __init(self, name: str, description: str, sqr_feet: int, seats: int):
+        super().__init__(name, description, sqr_feet)
+        self.seats = seats #How many guests can the restaurant seat?
+
+"""
+Department - an function of the mall for guests to interact with, such as security or customer service
+"""
+class Department(Plot):
+    def __init__(self, name: str, description: str, sqr_feet: int):
+        super().__init__(name, description, sqr_feet)
