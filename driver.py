@@ -28,9 +28,9 @@ while run_program:
 
     print("\nActions:")
     print("1)\tCreate New Store \n2)\tEdit Existing Store \n3)\tLoad Data From File \n4)\tSave Data To File")
-    print("5)\tDisplay Stores \n6)\tEnter User Perspective \n7)\tExit Program")
+    print("5)\tDisplay Stores \n6)\tExit Program")
     user_option = int(input("Choose option 1-5:\t"))
-    while user_option < 1 or user_option > 7:
+    while user_option < 1 or user_option > 6:
         user_option = int(input("Invalid choice. Must type a number 1-6:\t"))
 
     """
@@ -42,6 +42,7 @@ while run_program:
             #Gain input for the name, description, and type of store.
             store_name = input("\nWhat is your new store's name?\t")
             store_description = input("Give a short description of your store:\t")
+            store_sqr_feet = int(input("How large is your store in square feet? Enter an integer:\t"))
             store_type = int(input("Does your store sell goods (1), services (2), or both?(3)\t"))
             while store_type < 1 or store_type > 3:
                 store_type = int(input("\nInvalid option. Does your store sell goods (1), services (2), or both?(3)\t"))
@@ -49,11 +50,11 @@ while run_program:
             #Create the new store
             match store_type:
                 case 1:
-                    new_store = RetailStore(store_name, store_description)
+                    new_store = RetailStore(store_name, store_description, store_sqr_feet)
                 case 2:
-                    new_store = ServiceStore(store_name, store_description)
+                    new_store = ServiceStore(store_name, store_description, store_sqr_feet)
                 case 3:
-                    new_store = ComboStore(store_name, store_description)
+                    new_store = ComboStore(store_name, store_description, store_sqr_feet)
 
             user_mall.add_store(new_store)  #Add new store to the mall
             print("\n" + str(new_store) + " has been successfully added to " + str(user_mall))
@@ -83,7 +84,7 @@ while run_program:
 
                 case 2:     #Replace description of store
                     new_description = input("Please input a new name for " + str(active_store) + ":\t")
-                    active_store.set_name(new_description)
+                    active_store.set_description(new_description)
 
                 case 3:     #Edit items.
                     print("\nActions: \n1)\tAdd Product \n2)\tRemove Product \n3)\tEdit Product Stock/TimeSlots")
@@ -95,6 +96,9 @@ while run_program:
                         case 1:
                             active_store.add_product(create_product())  #Adds a product to the store using the
                                                                         #create_product function in product.py
+                            print("New Catalog is:")
+                            active_store.display_catalog()
+
                         case 2:
                             pass
                             #Remove item
@@ -114,8 +118,6 @@ while run_program:
             input("\nPress ENTER to continue.")
 
         case 6:
-            pass
-        case 7:
             run_program = False
 
 

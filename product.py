@@ -83,10 +83,10 @@ Product Functions
 def create_product():
     product_name = input("\nWhat is your new product's name?\t")
     product_description = input("Give a short description of your product (Press ENTER for none):\t")
-    product_type = int(input("Is your product an item or a service?\t"))
-    product_price = float(input("What is your product's price:\t"))
+    product_type = int(input("Is your product an item (1) or a service (2)?\t"))
     while product_type < 1 or product_type > 2:
         product_type = input("\nInvalid option. Is your product an item or a service?\t")
+    product_price = float(input("What is your product's price:\t"))
 
     if product_type == 1:
         item_quantity = int(input("How much stock does this item have? Must be positive integer:\t"))
