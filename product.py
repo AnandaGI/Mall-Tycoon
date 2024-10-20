@@ -9,17 +9,27 @@ General Product Class - Simply placeholder than can be put on shelves
 """
 class Product:
     def __init__(self, name: str, description = ""):
-        self.name = name
-        self.description = description
+        self.__name = name
+        self.__description = description
 
     def __str__(self):
         return self.name
 
-    def set_name(self, name):
-        self.name = name
+    @property
+    def name(self):
+        return self.__name
 
-    def set_description(self, description):
-        self.description = description
+    @name.setter
+    def name(self, name: str):
+        self.__name = name
+
+    @property
+    def description(self):
+        return self.__description
+
+    @description.setter
+    def description(self, description: str):
+        self.__description = description
 
 """
 Item Class - Product that has stock and can be sold or ordered.
@@ -27,17 +37,26 @@ Item Class - Product that has stock and can be sold or ordered.
 class Item(Product):
     def __init__(self, name: str, description, stock: int, price: float):
         super().__init__(name, description)
-        self.stock = stock
-        self.price = price
+        self.__stock = stock
+        self.__price = price
 
     def restock(self, amount: int):
-        self.stock += amount
+        self.__stock += amount
 
     def deplete_stock(self, amount):
-        self.stock -= amount
+        self.__stock -= amount
 
-    def change_price(self, new_price):
-        self.price = new_price
+    @property
+    def stock(self):
+        return self.__stock
+
+    @property
+    def price(self):
+        return self.__price
+
+    @price.setter
+    def price(self, new_price: float):
+        self.__price = new_price
 
 """
 Service Class - Service that has timeslots and can be booked
@@ -53,8 +72,6 @@ class Service(Product):
         else:
             self.time_slots = time_slots
 
-    def change_price(self, price):
-        self.price = price
 
     def add_timeslot(self, time_slot: str):  #Should be in form "XX:XX (AM/PM) - XX:XX (AM/PM)"
         if self.slots == 0:
@@ -75,6 +92,14 @@ class Service(Product):
 
     def remove_timeslot(self, index):       #Returns and removes the timeslot so that it can be added elsewhere.
         return self.time_slots.pop(index)
+
+    @property
+    def price(self):
+        return self.__price
+
+    @price.setter
+    def price(self, new_price: float):
+        self.__price = new_price
 
 
 """
