@@ -27,11 +27,11 @@ input("\n\n" + str(user_mall) + ", eh? That sounds great! Press ENTER to begin."
 while run_program:
 
     print("\nActions:")
-    print("1)\tCreate New Store \n2)\tEdit Existing Store \n3)\tLoad Data From File \n4)\tSave Data To File")
-    print("5)\tDisplay Stores \n6)\tExit Program")
-    user_option = int(input("Choose option 1-5:\t"))
-    while user_option < 1 or user_option > 6:
-        user_option = int(input("Invalid choice. Must type a number 1-6:\t"))
+    print("1)\tCreate New Store \n2)\tEdit Existing Store \n3)\tCreate New Items\n4)\tMall Actions\n5)\tLoad Data From File")
+    print("6)\tSave Data To File\n7)\tDisplay Stores \n8)\tExit Program")
+    user_option = int(input("Choose option 1-8:\t"))
+    while user_option < 1 or user_option > 8:
+        user_option = int(input("Invalid choice. Must type a number 1-8:\t"))
 
     """
     Execute Different Actions
@@ -43,18 +43,18 @@ while run_program:
             store_name = input("\nWhat is your new store's name?\t")
             store_description = input("Give a short description of your store:\t")
             store_sqr_feet = int(input("How large is your store in square feet? Enter an integer:\t"))
-            store_type = int(input("Does your store sell goods (1), services (2), or both?(3)\t"))
+            store_type = int(input("Is your store a (1)retail/service store, (2)restaurant, (3)mall department?\t"))
             while store_type < 1 or store_type > 3:
-                store_type = int(input("\nInvalid option. Does your store sell goods (1), services (2), or both?(3)\t"))
+                store_type = int(input("\nInvalid option. Which of the above best describes your store? (enter the #)\t"))
 
             #Create the new store
             match store_type:
                 case 1:
-                    new_store = RetailStore(store_name, store_description, store_sqr_feet)
+                    new_store = Store(store_name, store_description, store_sqr_feet)
                 case 2:
-                    new_store = ServiceStore(store_name, store_description, store_sqr_feet)
+                    new_store = Restaurant(store_name, store_description, store_sqr_feet)
                 case 3:
-                    new_store = ComboStore(store_name, store_description, store_sqr_feet)
+                    new_store = Department(store_name, store_description, store_sqr_feet)
 
             user_mall.add_store(new_store)  #Add new store to the mall
             print("\n" + str(new_store) + " has been successfully added to " + str(user_mall))
@@ -65,7 +65,7 @@ while run_program:
         case 2:
             user_mall.display_store_list()
             store_choice = int(input("Which store would you like to edit?\t"))
-            while store_choice < 1 or store_choice > user_mall.get_num_stores():
+            while store_choice < 1 or store_choice > user_mall.num_stores:
                 store_choice = int(input("Invalid selection. Please select a store from the list above:\t"))
 
             active_store = user_mall.get_store(store_choice-1)
@@ -94,8 +94,18 @@ while run_program:
 
                     match product_option:
                         case 1:
-                            active_store.add_product(create_product())  #Adds a product to the store using the
-                                                                        #create_product function in product.py
+                            user_mall.display_products()
+                            user_choice = input("Add a product from the above list (1 - " + str(user_mall.num_items) + ") or create new product (0):\t")
+                            while user_choice < 0 or user_choice > user_mall.num_items:
+                                user_choice = int(input("Invalid choice. Must type a valid integer:\t"))
+
+                            if user_choice == 0:
+                                active_store.add_product(create_product())  #Adds a product to the store using the
+                                                                            #create_product function in product.py
+                            else:
+                                new_product = copy_product(user_mall.get_item(user_choice))
+                                active_store.add_product(new_product)
+
                             print("New Catalog is:")
                             active_store.display_catalog()
 
