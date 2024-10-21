@@ -62,17 +62,13 @@ class Item(Product):
 Service Class - Service that has timeslots and can be booked
 """
 class Service(Product):
-    def __init__(self, name: str, description, price: float, time_slots = None):
+    def __init__(self, name: str, description, price: float, start_time: str = "8:00 AM", end_time: str = "7:00 PM"):
         super().__init__(name, description)
-        self.price = price
-        self.slots = 0
+        self.__price = price
+        self.__start_time = start_time
+        self.__end_time = end_time
 
-        if time_slots is None:
-            self.time_slots = []
-        else:
-            self.time_slots = time_slots
-
-
+    """
     def add_timeslot(self, time_slot: str):  #Should be in form "XX:XX (AM/PM) - XX:XX (AM/PM)"
         if self.slots == 0:
             self.time_slots.append(time_slot)
@@ -92,6 +88,7 @@ class Service(Product):
 
     def remove_timeslot(self, index):       #Returns and removes the timeslot so that it can be added elsewhere.
         return self.time_slots.pop(index)
+    """
 
     @property
     def price(self):
@@ -100,6 +97,10 @@ class Service(Product):
     @price.setter
     def price(self, new_price: float):
         self.__price = new_price
+
+    @property
+    def time_range(self):
+        return self.__start_time + " - " + self.__end_time
 
 
 """
@@ -120,3 +121,14 @@ def create_product():
     else:
         #Include a function here to read in a list of timeslots from a file
         return Service(product_name, product_description, product_price)
+
+def copy_product(product: Product):
+    if isinstance(product, Item):
+        new_stock = int(input("How much stock should this item have?\t"))
+        while new_stock < 0:
+            new_stock = int(input("Stock cannot be negative. Input positive integer:\t"))
+        return Item(product.name, product.description, product.price, new_stock)
+    elif isinstance(product, Service):
+        return Service(product.name, product.description, product.price)
+    else:
+        return Product(product.name, product.description)
