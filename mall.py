@@ -3,6 +3,7 @@ Creator:    Ananda Irwin
 Purpose:    Create stores, which sell items, services, or both
 Updated:    10/14/2024
 """
+from xml.sax.handler import property_dom_node
 
 from store import Plot
 from product import Product
@@ -11,7 +12,6 @@ class Mall:
     def __init__(self, name):
         self.__name = name
         self.__store_list = []          #List of stores
-        self.__num_stores = 0           #Number of stores in mall
         self.__all_products = []        #All products that have been created during the course of the mall's lifespan
         self.__active_products = []     #The current products that are being created or used
 
@@ -21,11 +21,14 @@ class Mall:
 
     def add_store(self, plot: Plot):
         self.__store_list.append(plot)
-        self.__num_stores += 1
 
     @property
     def num_stores(self):
-        return self.__num_stores
+        return len(self.__store_list)
+
+    @property
+    def num_items(self):
+        return len(self.__all_products)
 
     def get_store(self, index):
         return self.__store_list[index]
@@ -59,3 +62,6 @@ class Mall:
         i = 1
         for product in self.__all_products:
             print(i, ")\t", product.name)
+
+    def get_item(self, index: int):
+        return self.__all_products[index]

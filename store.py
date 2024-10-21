@@ -62,7 +62,7 @@ class Restaurant(Plot):
 
     #Could hypothetically create new product type recipe that utilizes other products in its composition, setting
     #the restaurant class apart from its peers somewhat
-    def add_food(self, food):
+    def add_product(self, food: Item):
         if isinstance(food, Item):
             self.__menu.append(food)
             return 1
@@ -99,7 +99,7 @@ class Department(Plot):
     def list(self):
         return self.__functions
 
-    def add_function(self, service: Service):
+    def add_product(self, service: Service):
         if isinstance(service, Service):
             self.__functions.append(service)
             return 1
