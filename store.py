@@ -7,120 +7,84 @@ from product import *
 
 class Plot:
     def __init__(self, name: str, description: str, square_feet: int):
-        self.name = name
-        self.description = description
-        self.square_feet = square_feet
+        self.__name = name
+        self.__description = description
+        self.__square_feet = square_feet
 
     def __str__(self):
         return self.name
 
-    def get_description(self):
-        return self.description
+    @property
+    def name(self):
+        return self.__name
 
-    def set_name(self, new_name: str):
-        self.name = new_name
+    @name.setter
+    def name(self, name: str):
+        self.__name = name
 
-    def set_description(self, new_description: str):
-        self.description = new_description
+    @property
+    def description(self):
+        return self.__description
 
-"""
-Retail Store - sells Items exclusively
-"""
-class RetailStore(Plot):
-    def __init__(self, name: str, description: str, sqr_feet: int):
-        super().__init__(name, description, sqr_feet)
-        self.catalog = []
+    @description.setter
+    def description(self, new_description: str):
+        self.__description = new_description
 
-    def __str__(self):
-        return self.name
+    @property
+    def square_feet(self):
+        return self.__square_feet
 
-    def add_product(self, item: Item):
-        if isinstance(item, Item):
-            self.catalog.append(item)
-        else:
-            print("Cannot add a service to a catalog of items.")
+    @square_feet.setter
+    def square_feet(self, square_feet):
+        self.__square_feet = square_feet
 
-    def display_catalog(self):
-        print("\n" + self.name + "'s Product Page\n" + ("-" * 20))
-        i = 1
-        for item in self.catalog:
-            print("("+str(i)+")", item, "|", item.stock, item.get_description())
-            i+=1
-
-        print("-" * 20)
-
-"""
-Service Store - sells Services exclusively
-"""
-class ServiceStore(Plot):
-    def __init__(self, name: str, description: str, sqr_feet: int):
-        super().__init__(name, description, sqr_feet)
-        self.catalog = []
-
-    def add_product(self, service: Service):
-        if isinstance(service, Service):
-            self.catalog.append(service)
-        else:
-            print("Cannot add an item to a service-based store.")
-
-    def display_catalog(self):
-        print("\n" + self.name + "'s Services\n" + ("-" * 20))
-        i = 1
-        for service in self.catalog:
-            print("("+str(i)+") " + str(service))
-            i+=1
-
-        print("-" * 20)
-
-"""
-Combo Store - sells both services and items
-"""
-class ComboStore(Plot):
-    def __init__(self, name: str, description: str, sqr_feet: int):
-        super().__init__(name, description, sqr_feet)
-        self.item_catalog = []
-        self.service_catalog = []
-
-    def add_item(self, item: Item):
-        self.item_catalog.append(item)
-
-    def add_service(self, service: Service):
-        self.service_catalog.append(service)
-
-    def add_product(self, product: Product):
-        if isinstance(product, Item):
-            self.add_item(product)
-        elif isinstance(product, Service):
-            self.add_service(product)
-        else:
-            print("\nInvalid product to add to store.")
-
-    def display_catalog(self):
-        print("\n" + self.name + "'s Product Page\n" + ("-" * 20))
-
-        #If there are items in the store's catalog
-        if len(self.item_catalog) > 0:
-            i = 1
-            for item in self.catalog:
-                print("(" + str(i) + ")", item, "|", item.stock, item.get_description())
-                i += 1
-
-        #If there are services in the store's catalog
-        if len(self.service_catalog) > 0:
-            for service in self.catalog:
-                print("(" + str(i) + ") " + str(service))
-                i += 1
-
-        if len(self.item_catalog) > 0 and len(self.service_catalog) > 0:
-            print("No products to display.")
 
 """
 Restaurant - has a limited capacity and a menu of food items
 """
-class Restaurant(RetailStore):
-    def __init(self, name: str, description: str, sqr_feet: int, seats: int):
+class Restaurant(Plot):
+    def __init__(self, name: str, description: str, sqr_feet: int, seats: int):
         super().__init__(name, description, sqr_feet)
-        self.seats = seats #How many guests can the restaurant seat?
+        self.__seats = seats #How many guests can the restaurant seat?
+        self.__menu = []
+
+    @property
+    def seats(self):
+        return self.__seats
+
+    @seats.setter
+    def seats(self, num_seats: int):
+        self.__seats = num_seats
+
+    @property
+    def list(self):
+        return self.__menu
+
+    #Could hypothetically create new product type recipe that utilizes other products in its composition, setting
+    #the restaurant class apart from its peers somewhat
+    def add_food(self, food):
+        if isinstance(food, Item):
+            self.__menu.append(food)
+            return 1
+        else:
+            return 0
+
+    def display_menu(self):
+        #If no products exist to display, notify user
+        if len(self.__menu) == 0:
+            print("No products to display.")
+            return
+
+        i = 1
+        #Print all items
+        for curr_product in self.__menu:
+            if isinstance(curr_product, Item):
+                print(str(i) + ")\t" + curr_product.name + " | " + curr_product.stock)
+                i += 1
+
+        print("-" * 20)
+        #End
+
 
 """
 Department - an function of the mall for guests to interact with, such as security or customer service
@@ -128,3 +92,65 @@ Department - an function of the mall for guests to interact with, such as securi
 class Department(Plot):
     def __init__(self, name: str, description: str, sqr_feet: int):
         super().__init__(name, description, sqr_feet)
+        souvenir = Product(self.name + " Department Souvenir", "A souvenir from the " + self.name + " Department.")
+        self.__functions = [souvenir]
+
+    @property
+    def list(self):
+        return self.__functions
+
+    def add_function(self, service: Service):
+        if isinstance(service, Service):
+            self.__functions.append(service)
+            return 1
+        else:
+            return 0
+
+    def display_department(self):
+        print("\nHi, welcome to " + self.name + "!\nWe can provide you with the following services:")
+        i = 1
+        for curr_product in self.__functions:
+            if isinstance(curr_product, Service):
+                print(str(i) + ")\t" + curr_product.name)
+                i += 1
+
+"""
+Combo Store - sells both services and items
+"""
+class Store(Plot):
+    def __init__(self, name: str, description: str, sqr_feet: int):
+        super().__init__(name, description, sqr_feet)
+        self.__product_catalog = []
+
+    @property
+    def list(self):
+        return self.__product_catalog
+
+    def add_product(self, product: Product):
+        self.__product_catalog.append(product)
+        return 1
+
+    def display_catalog(self):
+        print("\n" + self.name + "'s Product Page\n" + ("-" * 20))
+
+        #If no products exist to display, notify user
+        if len(self.__product_catalog) == 0:
+            print("No products to display.")
+            return
+
+        i = 1
+        #Print all items
+        print("Products:")
+        for curr_product in self.__product_catalog:
+            if isinstance(curr_product, Item):
+                print(str(i) + ")\t" + curr_product.name + " | " + curr_product.stock)
+                i += 1
+
+        print("Services:")
+        for curr_product in self.__product_catalog:
+            if isinstance(curr_product, Service):
+                print(str(i) + ")\t" + curr_product.name)
+                i += 1
+
+        print("-" * 20)
+        #End
