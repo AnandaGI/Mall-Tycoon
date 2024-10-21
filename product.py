@@ -35,7 +35,7 @@ class Product:
 Item Class - Product that has stock and can be sold or ordered.
 """
 class Item(Product):
-    def __init__(self, name: str, description, stock: int, price: float):
+    def __init__(self, name: str, description, price: float, stock: int = 0):
         super().__init__(name, description)
         self.__stock = stock
         self.__price = price
