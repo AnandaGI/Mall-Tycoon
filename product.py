@@ -12,8 +12,8 @@ class Product:
         self.__name = name
         self.__description = description
 
-    def __str__(self):
-        return self.name
+    def __eq__(self, other):
+        return self.__name == other.name
 
     @property
     def name(self):
@@ -31,6 +31,9 @@ class Product:
     def description(self, description: str):
         self.__description = description
 
+    def print_stats(self):
+        print(self.__name + " Stats\nDescription: " + self.__description)
+
 """
 Item Class - Product that has stock and can be sold or ordered.
 """
@@ -45,6 +48,10 @@ class Item(Product):
 
     def deplete_stock(self, amount):
         self.__stock -= amount
+
+    def print_stats(self):
+        super().print_stats()
+        print("Price: " + str(self.__price) + "\nStock: " + self.__stock)
 
     @property
     def stock(self):
@@ -102,6 +109,28 @@ class Service(Product):
     def time_range(self):
         return self.__start_time + " - " + self.__end_time
 
+    @property
+    def start(self):
+        return self.__start_time
+
+    @start.setter
+    def start(self, new_start: str):
+        self.__start_time = new_start
+
+    @property
+    def end(self):
+        return self.__end_time
+
+    @end.setter
+    def end(self, new_end: str):
+        self.__end_time = new_end
+
+
+    def print_stats(self):
+        super().print_stats()
+        print("Price: " + str(self.__price))
+        print("Starting Availability: " + self.__start_time + "\nEnding Availability: " + self.__end_time)
+
 
 """
 Product Functions
@@ -129,6 +158,8 @@ def copy_product(product: Product):
             new_stock = int(input("Stock cannot be negative. Input positive integer:\t"))
         return Item(product.name, product.description, product.price, new_stock)
     elif isinstance(product, Service):
-        return Service(product.name, product.description, product.price)
+        new_start = input("What is the starting period your service is offered? (Format: XX:XX AM)\t")
+        new_end = input("What is the ending period your service is offered? (Format: XX:XX PM)\t")
+        return Service(product.name, product.description, product.price, new_start, new_end)
     else:
         return Product(product.name, product.description)

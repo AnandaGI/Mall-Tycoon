@@ -17,7 +17,7 @@ class Mall:
 
     @property
     def name(self):
-        return self.name
+        return self.__name
 
     def add_store(self, plot: Plot):
         self.__store_list.append(plot)
@@ -36,23 +36,28 @@ class Mall:
     def display_mall(self):
         print("\n" + self.name + " Current Store List\n" + ("-"*20))
         for store in self.__store_list:
-            print(store, "|", store.get_description())
+            print(store.name + " | " + store.description)
 
     def display_store_list(self):
         print("\n" + self.name + " Current Store List\n" + ("-" * 20))
-        for i in range(0, len(self.__store_list)):
+        for i in range(0, self.num_stores):
             print((i+1), ")\t", self.__store_list[i])
 
     #This will go through all the stores and delete all instances of some particular product
-    def recall_product(self, product_name: str):
+    def recall_product(self, product: Product):
         for store in self.__store_list:
-            for product in store.list:
-                if product_name == product.name:
-                    store.list.remove()
+            if not isinstance(store, Plot): #As long as the store is not a plot
+                for other in store.list:
+                    if other == product:
+                        store.remove_product(other)
 
     def add_product(self, product: Product):
         self.__active_products.append(product)
-        self.__active_products.append(product)
+        #If the product already exists in the list of all products
+        for prod in self.__all_products:
+            if product == prod:
+                return          #Return and do not add to all_products if it already exists
+        self.__all_products.append(product)
 
     def clear_products(self):
         self.__active_products.clear()
@@ -61,6 +66,11 @@ class Mall:
         print("\nAll Previous Products\n" + ("-" * 20))
         i = 1
         for product in self.__all_products:
+            print(i, ")\t", product.name)
+
+    def display_active(self):
+        print("\nCurrent Active Products:")
+        for product in self.__active_products:
             print(i, ")\t", product.name)
 
     def get_item(self, index: int):
