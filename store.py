@@ -62,15 +62,18 @@ class Retailer(Plot):
     def remove_product(self, product: Product):
         self.__product_list.remove(product)
 
+    def get_product(self, index: int):
+        return self.__product_list[index]
+
     #Prints all the objects of some class type
-    def list_type(self, start_index: int, product_type):
-        i = start_index
+    def list_type(self, product_type):
+        i = 1
         for curr_product in self.__product_list:
             if isinstance(curr_product, product_type):
                 if product_type == Item:
-                    print(str(i) + ")\t" + curr_product.name + " | " + curr_product.stock)
+                    print(str(i) + ")\t" + curr_product.name + " | " + str(curr_product.stock) + " | $" + str(curr_product.price))
                 elif product_type == Service:
-                    print(str(i) + ")\t" + curr_product.name + " | " + curr_product.time_range)
+                    print(str(i) + ")\t" + curr_product.name + " | " + curr_product.time_range + " | $" + str(curr_product.price))
                 else:
                     print(str(i) + ")\t" + curr_product.name)
             i += 1
@@ -111,7 +114,7 @@ class Restaurant(Retailer):
     def display_catalog(self):
         super().display_catalog()
         print("Available Dishes:")
-        self.list_type(1, Item)
+        self.list_type(Item)
         print("-" * 20)
         #End
 
@@ -132,7 +135,7 @@ class Department(Retailer):
     def display_catalog(self):
         super().display_catalog()
         print("\nHi, welcome to " + self.name + "!\nWe can provide you with the following services:")
-        self.list_type(1, Service)
+        self.list_type(Service)
 
 
 """
@@ -148,10 +151,10 @@ class Store(Retailer):
         i = 1
         #Print all items
         print("Products:")
-        self.list_type(i, Item)
+        self.list_type(Item)
 
         print("Services:")
-        self.list_type(i, Service)
+        self.list_type(Service)
 
         print("-" * 20)
         #End

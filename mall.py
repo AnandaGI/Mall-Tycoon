@@ -30,6 +30,10 @@ class Mall:
     def num_items(self):
         return len(self.__all_products)
 
+    @property
+    def active_products(self):
+        return self.__active_products
+
     def get_store(self, index):
         return self.__store_list[index]
 
@@ -47,14 +51,13 @@ class Mall:
     def recall_product(self, product: Product):
         for store in self.__store_list:
             if not isinstance(store, Plot): #As long as the store is not a plot
-                for other in store.list:
-                    if other == product:
-                        store.remove_product(other)
+                for store_product in store.list:
+                    if store_product == product:
+                        store.remove_product(store_product)
 
     def add_product(self, product: Product):
-        self.__active_products.append(product)
-        #If the product already exists in the list of all products
-        for prod in self.__all_products:
+        self.__active_products.append(product)  #Allow duplicates (ex. different descriptions)
+        for prod in self.__all_products:    #If the product already exists in the list of all products
             if product == prod:
                 return          #Return and do not add to all_products if it already exists
         self.__all_products.append(product)
@@ -64,9 +67,13 @@ class Mall:
 
     def display_products(self):
         print("\nAll Previous Products\n" + ("-" * 20))
-        i = 1
-        for product in self.__all_products:
-            print(i, ")\t", product.name)
+        if self.num_stores == 0:
+            print("There are no stores in your mall yet.")
+        else:
+            i = 1
+            for product in self.__all_products:
+                print(i, ")\t", product.name)
+                i += 1
 
     def display_active(self):
         print("\nCurrent Active Products:")
