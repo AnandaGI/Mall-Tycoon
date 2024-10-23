@@ -34,6 +34,10 @@ class Mall:
     def active_products(self):
         return self.__active_products
 
+    @property
+    def store_list(self):
+        return self.__store_list
+
     def get_store(self, index):
         return self.__store_list[index]
 

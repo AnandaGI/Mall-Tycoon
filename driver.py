@@ -8,6 +8,8 @@ from product import *
 from store import *
 from mall import Mall
 import time
+from pathlib import Path
+import os
 
 run_program = True
 
@@ -222,7 +224,29 @@ while run_program:
         #Save Data To File
         #CASE 6, save data to a set of new text files
         case 6:
-            pass
+            curr_dir = os.path.dirname(os.path.realpath(__file__))
+            save_dest = curr_dir + "/saves/" + input("\nWhat would you like to call your save?\t") + ".txt"
+            f = open(save_dest, "w")
+            f.write(user_mall.name + "\n")
+
+            for plot in user_mall.store_list:
+                f.write(str(plot.__class__) + "\n" + plot.name + "\n" + plot.description + "\n")
+                if plot.__class__ is Restaurant:
+                    f.write(str(plot.seats) + "\n")
+
+                # This returns FALSE if and only if plot IS a plot, since they have no items
+                if not plot.__class__ is Plot:
+                    f.write(str(plot.num_products) + "\n")
+                    for product in plot.list:
+                        f.write(str(product.__class__) + "\n" + product.name + "\n")
+                        f.write(product.description + "\n" + str(product.price) + "\n")
+                        if isinstance(product, Item):
+                            f.write(str(product.stock) + "\n")
+                        else:
+                            f.write(product.start + "\n" + product.end + "\n")
+                f.write("#\n")    #Delimiter, tells the loading part when to move on to a new store
+            f.close()
+
 
 
         #Display Stores
@@ -242,3 +266,8 @@ while run_program:
     #Stop before continuing with program loop
     if run_program:
         input("Press ENTER to continue.")
+
+
+#This returns true if and only if the object is of the specified class excluding subclasses
+def exact_instance(obj, class_type):
+    return obj.__class__ is class_type

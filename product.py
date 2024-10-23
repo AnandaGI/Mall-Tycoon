@@ -51,7 +51,7 @@ class Item(Product):
 
     def print_stats(self):
         super().print_stats()
-        print("Price: " + str(self.__price) + "\nStock: " + self.__stock)
+        print("Price: " + str(self.__price) + "\nStock: " + str(self.__stock))
 
     @property
     def stock(self):
@@ -74,28 +74,6 @@ class Service(Product):
         self.__price = price
         self.__start_time = start_time
         self.__end_time = end_time
-
-    """
-    def add_timeslot(self, time_slot: str):  #Should be in form "XX:XX (AM/PM) - XX:XX (AM/PM)"
-        if self.slots == 0:
-            self.time_slots.append(time_slot)
-
-        #Use while no sorting algorithm in place yet
-        else:
-            for i in range (0, len(self.time_slots)):
-                print(str(i+1) + ")\t" + self.time_slots[i])
-
-            index = int(input("Where would you like to insert this time?\t"))
-            while index < 1 or index > self.slots:
-                index = int(input("Invalid index. Where would you like to insert this time?\t"))
-
-            self.time_slots.insert(index-1, time_slot)
-
-        self.slots += 1
-
-    def remove_timeslot(self, index):       #Returns and removes the timeslot so that it can be added elsewhere.
-        return self.time_slots.pop(index)
-    """
 
     @property
     def price(self):
@@ -145,10 +123,9 @@ def create_product():
 
     if product_type == 1:
         item_quantity = int(input("How much stock does this item have? Must be positive integer:\t"))
-        return Item(product_name, product_description, item_quantity, product_price)
+        return Item(product_name, product_description, product_price, item_quantity)
 
     else:
-        #Include a function here to read in a list of timeslots from a file
         return Service(product_name, product_description, product_price)
 
 def copy_product(product: Product):
