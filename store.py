@@ -43,6 +43,9 @@ class Plot:
     def square_feet(self, square_feet):
         self.__square_feet = square_feet
 
+    def display_catalog(self):
+        print("\n" + self.name + " Description Page\n\"" + self.description + "\"\n" + ("-" * 20))
+
 
 """
 Generic Store Class, subclass of a simple plot
@@ -79,12 +82,10 @@ class Retailer(Plot):
                     print(str(i) + ")\t" + curr_product.name + " | " + str(curr_product.stock) + " | $" + str(curr_product.price))
                 elif product_type == Service:
                     print(str(i) + ")\t" + curr_product.name + " | " + curr_product.time_range + " | $" + str(curr_product.price))
-                else:
-                    print(str(i) + ")\t" + curr_product.name)
             i += 1
 
     def display_catalog(self):
-        print("\n" + self.name + "'s Overview Page\n\"" + self.description + "\"\n" + ("-" * 20))
+        print("\n" + self.name + " Overview Page\n\"" + self.description + "\"\n" + ("-" * 20))
 
         # If no products exist to display, notify user
         if len(self.__product_list) == 0:
@@ -144,7 +145,6 @@ class Department(Retailer):
             return 0
 
     def display_catalog(self):
-        super().display_catalog()
         print("\nHi, welcome to " + self.name + "!\nWe can provide you with the following services:")
         self.list_type(Service)
 

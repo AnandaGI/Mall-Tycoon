@@ -60,8 +60,8 @@ class Mall:
 
     def display_all_plots(self):
         print("\n" + self.name + " Current Plots\n" + ("-"*20))
-        for store in self.__plot_list:
-            store.display_catalog()
+        for plot in self.__plot_list:
+            plot.display_catalog()
 
     def display_numbered_plots(self):
         print("\n" + self.name + " Current Plot List\n" + ("-" * 20))

@@ -105,8 +105,7 @@ def create_product():
     product_price = float(input("What is your product's price:\t"))
 
     if product_type == 1:
-        item_quantity = int(input("How much stock does this item have? Must be positive integer:\t"))
-        return Item(product_name, product_description, product_price, item_quantity)
+        return Item(product_name, product_description, product_price)
 
     else:
         return Service(product_name, product_description, product_price)

@@ -129,10 +129,10 @@ while run_program:
                                 if user_choice == 0:
                                     break
                                 else:
-                                    new_product = user_mall.get_item(user_choice-1)
-                                    active_store.add_product(new_product)  #Will add the product to the store\
+                                    new_product = copy_product( user_mall.get_item(user_choice-1) )
+                                    active_store.add_product(new_product)  #Will add the product to the store
 
-                            print("\nNew Store Catalog is:")
+                            print("\nNew Store Catalog is:", end="")
                             active_store.display_catalog()
 
                         #Remove Product
