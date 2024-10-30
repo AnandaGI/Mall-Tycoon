@@ -1,4 +1,4 @@
-import json, os
+import json
 from mall import Mall
 from store import *
 from product import *
