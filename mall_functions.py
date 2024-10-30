@@ -1,5 +1,10 @@
-import json
+"""
+Creator:    Ananda Irwin
+Purpose:    Additional functions for the driver to improve readability.
+Updated:    10/30/2024
+"""
 
+import json
 from mall import Mall
 from store import *
 from product import *
