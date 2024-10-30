@@ -1,17 +1,18 @@
-import json
+import json, os
 from mall import Mall
 from store import *
 from product import *
 
 #Validates that an integer is within a given range, looping until a valid integer can be returned
 def validate_bounds(message: str, lower_bound: int, upper_bound: int, zero_exit=False):
-    message = "\n" + message + " (" + str(lower_bound) + " - " + str(upper_bound) + ")"
     if zero_exit:
-        message += " (0 to exit)"
+        message = "\n" + message + " (" + str(lower_bound+1) + " - " + str(upper_bound) + ")" + " (0 to exit)"
+    else:
+        message = "\n" + message + " (" + str(lower_bound) + " - " + str(upper_bound) + ")"
 
-    answer = input(message + ":\t")
+    answer = int(input(message + ":\t"))
     while answer < lower_bound or answer > upper_bound:
-        answer = int(input("Invalid choice. Must type a number" + str(lower_bound) + " - " + str(upper_bound) + ":\t"))
+        answer = int(input("Invalid choice. Must type a number " + str(lower_bound) + " - " + str(upper_bound) + ":\t"))
     return answer
 
 #Validates a yes or no question until, looping until a Y or N is given.
