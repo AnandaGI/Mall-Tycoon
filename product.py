@@ -128,35 +128,3 @@ class Service(Product):
         super().print_stats()
         print("Price: " + str(self.__price))
         print("Starting Availability: " + self.__start_time + "\nEnding Availability: " + self.__end_time)
-
-
-"""
-Product Functions
-"""
-def create_product():
-    product_name = input("\nWhat is your new product's name?\t")
-    product_description = input("Give a short description of your product (Press ENTER for none):\t")
-    product_type = int(input("Is your product an item (1) or a service (2)?\t"))
-    while product_type < 1 or product_type > 2:
-        product_type = input("\nInvalid option. Is your product an item or a service?\t")
-    product_price = float(input("What is your product's price:\t"))
-
-    if product_type == 1:
-        item_quantity = int(input("How much stock does this item have? Must be positive integer:\t"))
-        return Item(product_name, product_description, product_price, item_quantity)
-
-    else:
-        return Service(product_name, product_description, product_price)
-
-def copy_product(product: Product):
-    if isinstance(product, Item):
-        new_stock = int(input("How much stock should this item have?\t"))
-        while new_stock < 0:
-            new_stock = int(input("Stock cannot be negative. Input positive integer:\t"))
-        return Item(product.name, product.description, product.price, new_stock)
-    elif isinstance(product, Service):
-        new_start = input("What is the starting period your service is offered? (Format: XX:XX AM)\t")
-        new_end = input("What is the ending period your service is offered? (Format: XX:XX PM)\t")
-        return Service(product.name, product.description, product.price, new_start, new_end)
-    else:
-        return Product(product.name, product.description)

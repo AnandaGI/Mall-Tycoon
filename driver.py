@@ -3,31 +3,43 @@ Creator:    Ananda Irwin
 Purpose:    Driver file for the tycoon game.
 Updated:    10/14/2024
 """
-
+from mall_functions import *
+from mall_functions import validate_bounds
 from product import *
 from store import *
 from mall import Mall
-import time
-from pathlib import Path
-import json
-import os
+import time, json, os
 
 run_program = True
+load_start = False
 
 #Beginning of Program - Get the Mall Name
-load_or_start = input("\nWould you like to load a save first? (Y or N)\t")
-while load_or_start.upper() != "Y" and load_or_start.upper() != "N":
-    load_or_start = input("Invalid input. Please input a \"Y\" or \"N\":\t")
+save_dir = os.path.dirname(os.path.realpath(__file__)) + "/saves/"
+saves = os.listdir(save_dir)
 
-#print("\nWelcome to your very own Mall Planner! Add stores, items, and more!")
-user_mall = Mall(input("\nFirst, let's start off with a name! It needs to be something catchy.\t"))
-#print("\nHmm.", end = "")
+if len(saves) != 0 and validate_yn("Would you like to load a save first?") == "Y":  #If there are no saves, don't bother loading
+    print("\nThe following saves are available to load from:")
+    i = 1
+    for save in saves:
+        print(str(i) + ")\t" + save.replace(".json", ""))
+        i += 1
+    user_index = validate_bounds("Please type the number of the save you wish to load.",
+                                 1, len(saves))
 
-#for i in range(0, 3):
-    #time.sleep(0.75)
-    #print(".", end = "")
+    save_dest = save_dir + saves[user_index - 1]
+    user_mall = load_mall(save_dest)
+    input("Save loaded successfully. Press Enter to begin.")
 
-#input("\n\n" + user_mall.name + ", eh? That sounds great! Press ENTER to begin.")
+else:
+    #print("\nWelcome to your very own Mall Planner! Add stores, items, and more!")
+    user_mall = Mall(input("\nFirst, let's start off with a name! It needs to be something catchy.\t"))
+    #print("\nHmm.", end = "")
+
+    #for i in range(0, 3):
+        #time.sleep(0.75)
+        #print(".", end = "")
+
+    #input("\n\n" + user_mall.name + ", eh? That sounds great! Press ENTER to begin.")
 
 #Main Program Loop
 while run_program:
@@ -50,9 +62,8 @@ while run_program:
             plot_name = input("\nWhat is your new plot's name?\t")
             plot_description = input("Give a short description of your plot:\t")
             plot_sqr_feet = int(input("How large is your plot in square feet? Enter an integer:\t"))
-            plot_type = int(input("Store type: \n1)\tRetail/Service store \n2)\tRestaurant \n3)\tMall department? \n4)\tPlot\n"))
-            while plot_type < 1 or plot_type > 4:
-                plot_type = int(input("\nInvalid option. Which of the above best describes your store? (enter the #)\t"))
+            print("Store type: \n1)\tRetail/Service store \n2)\tRestaurant \n3)\tMall department \n4)\tPlot")
+            plot_type = validate_bounds("Type your plot's type", 1, 4)
 
             #Create the new store
             match plot_type:
@@ -65,7 +76,7 @@ while run_program:
                     new_plot = Restaurant(plot_name, plot_description, plot_sqr_feet, num_seats)
                 case 3:
                     new_plot = Department(plot_name, plot_description, plot_sqr_feet)
-                case 4:
+                case _:
                     new_plot = Plot(plot_name, plot_description, plot_sqr_feet)
 
             user_mall.add_store(new_plot)  #Add new store to the mall
@@ -81,17 +92,14 @@ while run_program:
                 continue
 
             user_mall.display_store_list()
-            store_choice = int(input("Which store would you like to edit?\t"))
-            while store_choice < 1 or store_choice > user_mall.num_stores:
-                store_choice = int(input("Invalid selection. Please select a store from the list above:\t"))
+            store_choice = validate_bounds("Which store would you like to edit?",
+                                           1, user_mall.num_stores)
 
             active_store = user_mall.get_store(store_choice-1)
             print("\nNow editing " + active_store.name + ".")
 
             print("Options: \n1)\tEdit Name \n2)\tEdit Description \n3)\tEdit Items/Services")
-            store_option = int(input("Choose option 1-3:\t"))
-            while store_option < 1 or store_option > 3:
-                store_option = int(input("Invalid choice. Must type a number 1-3:\t"))
+            store_option = validate_bounds("Type option", 1, 3)
 
             #Go through options for store
             match store_option:
@@ -109,27 +117,23 @@ while run_program:
                         continue
 
                     print("\nActions: \n1)\tAdd Product \n2)\tRemove Product \n3)\tEdit Product Stock/TimeSlots")
-                    product_option = int(input("Choose option 1-3:\t"))
-                    while product_option < 1 or product_option > 3:
-                        product_option = int(input("Invalid choice. Must type a number 1-3:\t"))
+                    product_option = validate_bounds("Type option", 1, 3)
 
                     match product_option:
                         #Add Product
                         case 1:
                             print("\nActive Products: " + str([product.name for product in user_mall.active_products]))
-                            if input("Add to your active products from saved? (Y or N)\t").upper() == "Y":
+                            if validate_yn("Add to your active products from saved?") == "Y":
                                 while True:
                                     user_mall.display_products()
-                                    print("Add a product from the above list (1 - " + str(user_mall.num_items) + ")")
-                                    user_choice = int(input("Or type 0 to exit.\t"))
-                                    while user_choice < 0 or user_choice > user_mall.num_items:
-                                        user_choice = int(input("Invalid choice. Must type a valid integer:\t"))
+                                    user_choice = validate_bounds("Add a product from the above list",
+                                                                  1, user_mall.num_items, zero_exit=True)
 
-                                    if user_choice != 0:
+                                    if user_choice == 0:
+                                        break
+                                    else:
                                         new_product = user_mall.get_item(user_choice-1)
                                         user_mall.add_product(new_product)  #Will append the product only to the active_list
-                                    else:
-                                        break
 
                                     print("\nActive Products: " + str([product.name for product in user_mall.active_products]))
 
@@ -147,9 +151,8 @@ while run_program:
                         case 2:
                             print("Select a product from the following list to remove:")
                             active_store.display_catalog()
-                            user_choice = input("\nType the number of the product you wish to remove:\t")
-                            while user_choice < 1 or user_choice > user_mall.num_items:
-                                user_choice = int(input("Invalid choice. Must type a valid integer:\t"))
+                            user_choice = validate_bounds("Type the number of the product you wish to remove:",
+                                                          1, user_mall.num_items)
 
                             active_store.remove_product(user_choice-1)
 
@@ -157,18 +160,15 @@ while run_program:
                         case 3:
                             print("Select a product from the following list to edit:")
                             active_store.display_catalog()
-                            user_choice = int(input("Type the number of the product:\t"))
-                            while user_choice < 1 or user_choice > user_mall.num_items:
-                                user_choice = int(input("Invalid choice. Must type a valid integer:\t"))
+                            user_choice = validate_bounds("Type the number of the product",
+                                                          1, user_mall.num_items)
 
                             store_product = active_store.get_product(user_choice)
                             store_product.print_stats()
 
-                            print(
-                                "\nWould you like to edit " + store_product.name + "'s \n0)\tCancel \n1)\tPrice \n2)\tStock/Availability")
-                            user_choice = input()
-                            while user_choice != 0 or 1 or 2:
-                                user_choice = input("Not a valid option. Please type an integer 0 - 2:\t")
+                            print("\nWould you like to edit " + store_product.name + "'s" +
+                                  "\n0)\tCancel \n1)\tPrice \n2)\tStock/Availability")
+                            user_choice = validate_bounds("", 0, 2)
 
                             if user_choice == 1:
                                 new_price = float(input("Please input a new price for " + store_product.name + ":\t"))
@@ -177,7 +177,7 @@ while run_program:
                             else:
                                 if isinstance(store_product, Item):
                                     amount = int(input(
-                                        "How much stock do you want to add or remove? (Type a positive or negative integer)\t"))
+                                        "How much stock do you want to add or remove? (Type + or - integer)\t"))
                                     if amount >= 0:
                                         store_product.restock(amount)
                                     else:
@@ -197,9 +197,9 @@ while run_program:
             while True:
                 new_product = create_product()
                 user_mall.add_product(new_product)
+                print(new_product.name + " has been successfully added.")
 
-                print("\nNew list of active products: " + str([product.name for product in user_mall.active_products]))
-                if input("Would you like to add another product? (Y or N) ").upper() != "Y":
+                if validate_yn("Would you like to add another product?") != "Y":
                     break
                 #End of Case 3
 
@@ -212,9 +212,8 @@ while run_program:
                 continue
 
             user_mall.display_products()
-            index = int(input("\nType the number of the product you wish to recall:\t"))
-            while index < 1 or index > user_mall.num_items:
-                index = int(input("Invalid choice. Must type a valid integer:\t"))
+            index = validate_bounds("Type the number of the product you wish to recall:",
+                                    1, user_mall.num_items)
 
             user_mall.recall_product( user_mall.get_item(index-1) )
             #End of Case 4
@@ -223,61 +222,26 @@ while run_program:
         #Load Data From File
         #CASE 5, load data from a set of previously saved text files
         case 5:
-
-
             save_dir = os.path.dirname(os.path.realpath(__file__)) + "/saves/"
             saves = os.listdir(save_dir)
             if len(saves) == 0:
                 print("\nThere are no previous saves to load from. (You may need to insert your memory card.)")
-                continue
+                continue    #Note: No memory card exists. This is a callback to the days of 8mb memory cards.
 
             print("\nThe following saves are available to load from:")
             i = 1
             for save in saves:
                 print(str(i) + ")\t" + save.replace(".json", ""))
                 i += 1
-            user_index = int(input("Please type the number of the save you wish to load. (Or 0 to exit)\t"))
-            while user_index < 0 or user_index > len(saves):
-                user_index = int(input("Please input a valid save option or type 0 to exit:\t"))
+            user_index = validate_bounds("Please type the number of the save you wish to load.",
+                                         0, len(saves), zero_exit=True)
 
             if user_index == 0:    #If the user wants to exit, skip the rest of the function
                 continue
 
             save_dest = save_dir + saves[user_index-1]
-
-            with open(save_dest, "r") as f:
-                data = json.load(f)
-            user_mall = Mall(data["mall_name"])
-
-            i = 0
-            while "plot"+str(i) in data:
-                p_dict = data["plot"+str(i)]    #Nice try p_dicty
-                name, description, sqr_feet = p_dict["name"], p_dict["description"], p_dict["square_feet"]
-                match p_dict["class_type"]:
-                    case "Plot":
-                        new_plot = Plot(name, description, sqr_feet)
-                    case "Store":
-                        new_plot = Store(name, description, sqr_feet)
-                    case "Restaurant":
-                        new_plot = Restaurant(name, description, sqr_feet, p_dict["seats"])
-                    case "Department":
-                        new_plot = Department(name, description, sqr_feet)
-                user_mall.add_store(new_plot)
-
-                n = 0
-                while "item"+str(n) in p_dict:
-                    i_dict = p_dict["item"+str(n)]
-                    name, description, price = i_dict["name"], i_dict["description"], i_dict["price"]
-                    if i_dict["class_type"] == "Item":
-                        user_mall.add_product(Item(name, description, price, i_dict["stock"]))
-                    else:
-                        user_mall.add_product(Service(name, description, price, i_dict["start_time"], i_dict["end_time"]))
-                    n += 1
-
-                for product in user_mall.active_products:
-                    new_plot.add_product(product)
-                user_mall.clear_products()
-                i += 1
+            user_mall = load_mall(save_dest)
+            #End of case 5
 
 
         #Save Data To File
@@ -286,28 +250,17 @@ while run_program:
             curr_dir = os.path.dirname(os.path.realpath(__file__))
             save_dest = curr_dir + "/saves/" + input("\nWhat would you like to call your save?\t") + ".json"
             if os.path.exists(save_dest):
-                os.remove(save_dest)
+                save_yn = validate_yn("Save with this name already exists. Would you like to overwrite?")
 
-            json_data = {"mall_name": user_mall.name}
-            i = 0
-            for plot in user_mall.store_list:
-                json_data["plot" + str(i)] = plot.__dict__()
-
-                if not plot.__class__ is Plot:
-                    n = 0
-                    for product in plot.list:
-                        json_data["plot" + str(i)]["item" + str(n)] = product.__dict__()
-                        n+= 1
-                i+= 1
-
-            with open(save_dest, mode="a", encoding="utf-8") as f:
-                json.dump(json_data, f, sort_keys=True, indent=4)
+            save_mall(save_dest, user_mall)
         #End of case 6
 
 
         #Display Stores
         #CASE 7, the user views all plots inside their mall
         case 7:
+            print("Display Options: \n1)\tShorthand \n2)\tAll store info \n3)\tSpecific Store")
+            user_choice = validate_bounds("", 1, 3)
             user_mall.display_mall()
             print()     #Newline
             #End of Case 7
