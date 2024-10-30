@@ -1,4 +1,5 @@
 import json
+
 from mall import Mall
 from store import *
 from product import *
@@ -52,14 +53,13 @@ def load_mall(save_dest: str):
             i_dict = p_dict["item" + str(n)]
             name, description, price = i_dict["name"], i_dict["description"], i_dict["price"]
             if i_dict["class_type"] == "Item":
-                user_mall.add_product(Item(name, description, price, i_dict["stock"]))
+                new_product = (Item(name, description, price, i_dict["stock"]))
             else:
-                user_mall.add_product(Service(name, description, price, i_dict["start_time"], i_dict["end_time"]))
+                new_product = (Service(name, description, price, i_dict["start_time"], i_dict["end_time"]))
             n += 1
 
-        for product in user_mall.active_products:
-            new_plot.add_product(product)
-        user_mall.clear_products()
+            user_mall.add_product(new_product)      #Add to the mall
+            new_plot.add_product(new_product)   #Add to the active store
         i += 1
 
     return user_mall
@@ -73,7 +73,7 @@ def save_mall(save_dest: str, user_mall: Mall):
     save_data = {"mall_name": user_mall.name}
 
     i = 0
-    for plot in user_mall.store_list:
+    for plot in user_mall.plot_list:
         save_data["plot" + str(i)] = plot.__dict__()
 
         if not plot.__class__ is Plot:
@@ -83,7 +83,7 @@ def save_mall(save_dest: str, user_mall: Mall):
                 n += 1
         i += 1
 
-    with open(save_dest, mode="a", encoding="utf-8") as f:
+    with open(save_dest, mode="w", encoding="utf-8") as f:
         json.dump(save_data, f, sort_keys=True, indent=4)
 
 

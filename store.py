@@ -84,7 +84,7 @@ class Retailer(Plot):
             i += 1
 
     def display_catalog(self):
-        print("\n" + self.name + "'s Overview Page\n" + ("-" * 20))
+        print("\n" + self.name + "'s Overview Page\n\"" + self.description + "\"\n" + ("-" * 20))
 
         # If no products exist to display, notify user
         if len(self.__product_list) == 0:
