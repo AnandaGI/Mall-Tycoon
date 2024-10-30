@@ -11,8 +11,13 @@ class Plot:
         self.__description = description
         self.__square_feet = square_feet
 
-    def __str__(self):
-        return self.name
+    def __dict__(self):
+        return {
+            "class_type": self.__class__.__name__,
+            "name": self.__name,
+            "description": self.__description,
+            "square_feet": self.__square_feet
+        }
 
     @property
     def name(self):
@@ -84,7 +89,8 @@ class Retailer(Plot):
         # If no products exist to display, notify user
         if len(self.__product_list) == 0:
             print("No products to display.")
-            return
+            return False
+        return True
         
 
 """
@@ -94,6 +100,11 @@ class Restaurant(Retailer):
     def __init__(self, name: str, description: str, sqr_feet: int, seats: int = 95):
         super().__init__(name, description, sqr_feet)
         self.__seats = seats #How many guests can the restaurant seat?
+
+    def __dict__(self):
+        self_dict = super().__dict__()
+        self_dict["seats"] = self.__seats
+        return self_dict
 
     @property
     def seats(self):
@@ -112,11 +123,11 @@ class Restaurant(Retailer):
             return 0
 
     def display_catalog(self):
-        super().display_catalog()
-        print("Available Dishes:")
-        self.list_type(Item)
-        print("-" * 20)
-        #End
+        if super().display_catalog():
+            print("Available Dishes:")
+            self.list_type(Item)
+            print("-" * 20)
+            #End
 
 
 """

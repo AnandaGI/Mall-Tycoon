@@ -9,11 +9,16 @@ from store import *
 from mall import Mall
 import time
 from pathlib import Path
+import json
 import os
 
 run_program = True
 
 #Beginning of Program - Get the Mall Name
+load_or_start = input("\nWould you like to load a save first? (Y or N)\t")
+while load_or_start.upper() != "Y" and load_or_start.upper() != "N":
+    load_or_start = input("Invalid input. Please input a \"Y\" or \"N\":\t")
+
 #print("\nWelcome to your very own Mall Planner! Add stores, items, and more!")
 user_mall = Mall(input("\nFirst, let's start off with a name! It needs to be something catchy.\t"))
 #print("\nHmm.", end = "")
@@ -211,48 +216,100 @@ while run_program:
             while index < 1 or index > user_mall.num_items:
                 index = int(input("Invalid choice. Must type a valid integer:\t"))
 
-            user_mall.recall_product( user_mall.get_item(index) )
+            user_mall.recall_product( user_mall.get_item(index-1) )
             #End of Case 4
 
 
         #Load Data From File
         #CASE 5, load data from a set of previously saved text files
         case 5:
-            pass
+
+
+            save_dir = os.path.dirname(os.path.realpath(__file__)) + "/saves/"
+            saves = os.listdir(save_dir)
+            if len(saves) == 0:
+                print("\nThere are no previous saves to load from. (You may need to insert your memory card.)")
+                continue
+
+            print("\nThe following saves are available to load from:")
+            i = 1
+            for save in saves:
+                print(str(i) + ")\t" + save.replace(".json", ""))
+                i += 1
+            user_index = int(input("Please type the number of the save you wish to load. (Or 0 to exit)\t"))
+            while user_index < 0 or user_index > len(saves):
+                user_index = int(input("Please input a valid save option or type 0 to exit:\t"))
+
+            if user_index == 0:    #If the user wants to exit, skip the rest of the function
+                continue
+
+            save_dest = save_dir + saves[user_index-1]
+
+            with open(save_dest, "r") as f:
+                data = json.load(f)
+            user_mall = Mall(data["mall_name"])
+
+            i = 0
+            while "plot"+str(i) in data:
+                p_dict = data["plot"+str(i)]    #Nice try p_dicty
+                name, description, sqr_feet = p_dict["name"], p_dict["description"], p_dict["square_feet"]
+                match p_dict["class_type"]:
+                    case "Plot":
+                        new_plot = Plot(name, description, sqr_feet)
+                    case "Store":
+                        new_plot = Store(name, description, sqr_feet)
+                    case "Restaurant":
+                        new_plot = Restaurant(name, description, sqr_feet, p_dict["seats"])
+                    case "Department":
+                        new_plot = Department(name, description, sqr_feet)
+                user_mall.add_store(new_plot)
+
+                n = 0
+                while "item"+str(n) in p_dict:
+                    i_dict = p_dict["item"+str(n)]
+                    name, description, price = i_dict["name"], i_dict["description"], i_dict["price"]
+                    if i_dict["class_type"] == "Item":
+                        user_mall.add_product(Item(name, description, price, i_dict["stock"]))
+                    else:
+                        user_mall.add_product(Service(name, description, price, i_dict["start_time"], i_dict["end_time"]))
+                    n += 1
+
+                for product in user_mall.active_products:
+                    new_plot.add_product(product)
+                user_mall.clear_products()
+                i += 1
 
 
         #Save Data To File
         #CASE 6, save data to a set of new text files
         case 6:
             curr_dir = os.path.dirname(os.path.realpath(__file__))
-            save_dest = curr_dir + "/saves/" + input("\nWhat would you like to call your save?\t") + ".txt"
-            f = open(save_dest, "w")
-            f.write(user_mall.name + "\n")
+            save_dest = curr_dir + "/saves/" + input("\nWhat would you like to call your save?\t") + ".json"
+            if os.path.exists(save_dest):
+                os.remove(save_dest)
 
+            json_data = {"mall_name": user_mall.name}
+            i = 0
             for plot in user_mall.store_list:
-                f.write(str(plot.__class__) + "\n" + plot.name + "\n" + plot.description + "\n")
-                if plot.__class__ is Restaurant:
-                    f.write(str(plot.seats) + "\n")
+                json_data["plot" + str(i)] = plot.__dict__()
 
-                # This returns FALSE if and only if plot IS a plot, since they have no items
                 if not plot.__class__ is Plot:
-                    f.write(str(plot.num_products) + "\n")
+                    n = 0
                     for product in plot.list:
-                        f.write(str(product.__class__) + "\n" + product.name + "\n")
-                        f.write(product.description + "\n" + str(product.price) + "\n")
-                        if isinstance(product, Item):
-                            f.write(str(product.stock) + "\n")
-                        else:
-                            f.write(product.start + "\n" + product.end + "\n")
-                f.write("#\n")    #Delimiter, tells the loading part when to move on to a new store
-            f.close()
+                        json_data["plot" + str(i)]["item" + str(n)] = product.__dict__()
+                        n+= 1
+                i+= 1
 
+            with open(save_dest, mode="a", encoding="utf-8") as f:
+                json.dump(json_data, f, sort_keys=True, indent=4)
+        #End of case 6
 
 
         #Display Stores
         #CASE 7, the user views all plots inside their mall
         case 7:
             user_mall.display_mall()
+            print()     #Newline
             #End of Case 7
 
 
@@ -266,8 +323,3 @@ while run_program:
     #Stop before continuing with program loop
     if run_program:
         input("Press ENTER to continue.")
-
-
-#This returns true if and only if the object is of the specified class excluding subclasses
-def exact_instance(obj, class_type):
-    return obj.__class__ is class_type

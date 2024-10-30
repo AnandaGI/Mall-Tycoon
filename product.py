@@ -12,6 +12,13 @@ class Product:
         self.__name = name
         self.__description = description
 
+    def __dict__(self):
+        return {
+            "class_type": self.__class__.__name__,
+            "name": self.__name,
+            "description": self.__description
+        }
+
     def __eq__(self, other):
         return self.__name == other.name
 
@@ -42,6 +49,12 @@ class Item(Product):
         super().__init__(name, description)
         self.__stock = stock
         self.__price = price
+
+    def __dict__(self):
+        item_dict = super().__dict__()
+        item_dict["price"] = self.__price
+        item_dict["stock"] = self.__stock
+        return item_dict
 
     def restock(self, amount: int):
         self.__stock += amount
@@ -74,6 +87,13 @@ class Service(Product):
         self.__price = price
         self.__start_time = start_time
         self.__end_time = end_time
+
+    def __dict__(self):
+        item_dict = super().__dict__()
+        item_dict["price"] = self.__price
+        item_dict["start_time"] = self.__start_time
+        item_dict["end_time"] = self.__end_time
+        return item_dict
 
     @property
     def price(self):

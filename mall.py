@@ -15,6 +15,20 @@ class Mall:
         self.__all_products = []        #All products that have been created during the course of the mall's lifespan
         self.__active_products = []     #The current products that are being created or used
 
+    def __dict__(self):
+        plot_list = []
+        for plot in self.__store_list:
+            plot_list.append(plot.__dict__)
+            product_list = []
+            if not plot.__class__ is Plot:
+                for product in plot.list:
+                    product_list.append(product.__dict__)
+                plot_list[-1]["product_list"] = product_list
+        return {
+            "name": self.__name,
+            "plot_list": self.__store_list
+        }
+
     @property
     def name(self):
         return self.__name
@@ -49,7 +63,7 @@ class Mall:
     def display_store_list(self):
         print("\n" + self.name + " Current Store List\n" + ("-" * 20))
         for i in range(0, self.num_stores):
-            print((i+1), ")\t", self.__store_list[i])
+            print((i+1), ")\t", self.__store_list[i].name)
 
     #This will go through all the stores and delete all instances of some particular product
     def recall_product(self, product: Product):
@@ -61,10 +75,8 @@ class Mall:
 
     def add_product(self, product: Product):
         self.__active_products.append(product)  #Allow duplicates (ex. different descriptions)
-        for prod in self.__all_products:    #If the product already exists in the list of all products
-            if product == prod:
-                return          #Return and do not add to all_products if it already exists
-        self.__all_products.append(product)
+        if not product in self.__all_products:    #If the product already exists in the list of all products
+            self.__all_products.append(product)
 
     def clear_products(self):
         self.__active_products.clear()
