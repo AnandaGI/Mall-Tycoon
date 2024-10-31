@@ -97,8 +97,8 @@ while run_program:
             active_store = user_mall.get_store(store_choice-1)
             print("\nNow editing " + active_store.name + ".")
 
-            print("Options: \n1)\tEdit Name \n2)\tEdit Description \n3)\tEdit Items/Services")
-            store_option = validate_bounds("Enter option", 1, 3)
+            print("Options: \n1)\tEdit Name \n2)\tEdit Description \n3)\tEdit Items/Services \n4)\tRemove Current Plot")
+            store_option = validate_bounds("Enter option", 1, 4)
 
             #Go through options for store
             match store_option:
@@ -177,6 +177,8 @@ while run_program:
                                         "What is the starting period your service is offered? (Format: XX:XX AM)\t")
                                     store_product.end = input(
                                         "What is the ending period your service is offered? (Format: XX:XX PM)\t")
+                case 4:
+                    user_mall.remove_plot(active_store)
             #End of Case 2
 
 
@@ -250,13 +252,14 @@ while run_program:
         #Display Stores
         #CASE 7, the user views all plots inside their mall
         case 7:
-            if user_mall.num_stores == 0:
-                print("\nThere are no stores to display.")
-                continue
 
             print("\nDisplay Options: \n1)\tShorthand \n2)\tAll plot info \n3)\tSpecific Store Info" +
                   "\n4)\tMall Statistics", end="")
             user_choice = validate_bounds("Enter option", 1, 4)
+
+            if user_choice != 4 and user_mall.num_stores == 0:  #If the user wants to display store info
+                print("\nThere are no stores to display.")
+                continue
 
             match user_choice:
                 case 1:

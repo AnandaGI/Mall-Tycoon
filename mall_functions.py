@@ -36,7 +36,7 @@ which are in the form of a json file. This then returns a mall class
 def load_mall(save_dest: str):
     with open(save_dest, "r") as f:
         data = json.load(f)
-    user_mall = Mall(data["mall_name"])
+    user_mall = Mall(data["mall_name"], data["recalls"])
 
     i = 0
     while "plot" + str(i) in data:
@@ -75,7 +75,7 @@ save_mall() takes in a file destination and the mall object, saving all of its c
 to a json file in the /saves/ directory, where it can be loaded later
 """
 def save_mall(save_dest: str, user_mall: Mall):
-    save_data = {"mall_name": user_mall.name}
+    save_data = {"mall_name": user_mall.name, "recalls": user_mall.recalls}
 
     i = 0
     for plot in user_mall.plot_list:
