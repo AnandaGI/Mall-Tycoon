@@ -67,8 +67,8 @@ class Retailer(Plot):
         self.__product_list.append(product)
         return 1
 
-    def remove_product(self, product: Product):
-        self.__product_list.remove(product)
+    def remove_product(self, index: int):
+        self.__product_list.remove( self.get_product(index) )
 
     def get_product(self, index: int):
         return self.__product_list[index]
@@ -77,11 +77,12 @@ class Retailer(Plot):
     def list_type(self, product_type):
         i = 1
         for curr_product in self.__product_list:
-            if isinstance(curr_product, product_type):
+            if isinstance(curr_product, product_type):  #IF the product is of the correct type, use right variable
                 if product_type == Item:
-                    print(str(i) + ")\t" + curr_product.name + " | " + str(curr_product.stock) + " | $" + str(curr_product.price))
-                elif product_type == Service:
-                    print(str(i) + ")\t" + curr_product.name + " | " + curr_product.time_range + " | $" + str(curr_product.price))
+                    availability = str(curr_product.stock)
+                else:
+                    availability = curr_product.time_range
+                print(str(i) + ")\t" + curr_product.name + " | " + availability + " | $" + str(curr_product.price))
             i += 1
 
     def display_catalog(self):

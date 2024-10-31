@@ -7,11 +7,13 @@ Updated:    10/14/2024
 from store import Plot
 from product import Product
 
+#ADD SLOTS TO THE MALL SO THAT YOU CAN START HAVE A STARTER MALL
 class Mall:
     def __init__(self, name):
         self.__name = name
         self.__plot_list = []          #List of stores
         self.__all_products = []        #All products that have been created during the course of the mall's lifespan
+        self.__recalls = 0
 
     """
     Properties
@@ -31,6 +33,10 @@ class Mall:
     @property
     def plot_list(self):
         return self.__plot_list
+
+    @property
+    def recalls(self):
+        return self.__recalls
 
     """
     Functions
@@ -52,6 +58,7 @@ class Mall:
                 for store_product in store.list:
                     if store_product == product:
                         store.remove_product(store_product)
+                        self.__recalls += 1
 
     def display_mall(self):
         print("\n" + self.name + " Current Plots\n" + ("-"*20))

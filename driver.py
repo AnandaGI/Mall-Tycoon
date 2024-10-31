@@ -4,11 +4,10 @@ Purpose:    Driver file for the tycoon game.
 Updated:    10/14/2024
 """
 from mall_functions import *
-from mall_functions import validate_bounds
 from product import *
 from store import *
 from mall import Mall
-import time, json, os
+import time, os
 
 run_program = True
 
@@ -46,7 +45,7 @@ while run_program:
     #ADD A SIMULATE DAY FUNCTION
     print("\nActions:")
     print("1)\tCreate New Plot \n2)\tEdit Existing Plot \n3)\tCreate New Items\n4)\tRecall Product\n5)\tLoad Data From File")
-    print("6)\tSave Data To File\n7)\tDisplay Stores \n8)\tExit Program")
+    print("6)\tSave Data To File\n7)\tDisplay Mall Data \n8)\tExit Program")
     user_option = int(input("Choose option 1-8:\t"))
     while user_option < 1 or user_option > 8:
         user_option = int(input("Invalid choice. Must type a number 1-8:\t"))
@@ -255,8 +254,9 @@ while run_program:
                 print("\nThere are no stores to display.")
                 continue
 
-            print("\nDisplay Options: \n1)\tShorthand \n2)\tAll plot info \n3)\tSpecific Store Info", end="")
-            user_choice = validate_bounds("Enter option", 1, 3)
+            print("\nDisplay Options: \n1)\tShorthand \n2)\tAll plot info \n3)\tSpecific Store Info" +
+                  "\n4)\tMall Statistics", end="")
+            user_choice = validate_bounds("Enter option", 1, 4)
 
             match user_choice:
                 case 1:
@@ -267,7 +267,16 @@ while run_program:
                     user_mall.display_numbered_plots()
                     store_choice = validate_bounds("Which store would you like to see?",
                                                    1, user_mall.num_stores)
-                    user_mall.get_store(store_choice).display_catalog()
+                    user_mall.get_store(store_choice-1).display_catalog()
+                case 4:
+                    print("\nMall Statistics:")
+                    print("Stores:\t " + str(user_mall.num_stores))
+                    print("Items:\t" + str(user_mall.num_items))
+                    total_area = 0
+                    for plot in user_mall.plot_list:
+                        total_area += plot.square_feet
+                    print("Combined area of stores:\t" + str(total_area) + " square feet")
+                    print("Recalled items:\t" + str(user_mall.recalls))
             print()     #Newline
             #End of Case 7
 
