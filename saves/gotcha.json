@@ -1,0 +1,16 @@
+{
+    "mall_name": "abc",
+    "plot0": {
+        "class_type": "Store",
+        "description": "A",
+        "name": "Wanna",
+        "square_feet": 5
+    },
+    "plot1": {
+        "class_type": "Restaurant",
+        "description": "B",
+        "name": "Oooooaaha",
+        "seats": 3,
+        "square_feet": 50
+    }
+}

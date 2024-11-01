@@ -1,0 +1,106 @@
+{
+    "mall_name": "MegaMart",
+    "recalls": 0,
+    "plot0": {
+        "class_type": "Restaurant",
+        "description": "Burger and Fries fast food joint",
+        "item0": {
+            "class_type": "Item",
+            "description": "",
+            "name": "Krabby Patty",
+            "price": 9.99,
+            "stock": 500
+        },
+        "item1": {
+            "class_type": "Item",
+            "description": "",
+            "name": "Sprite",
+            "price": 2.17,
+            "stock": 500
+        },
+        "name": "Wendy's",
+        "seats": 45,
+        "square_feet": 2500
+    },
+    "plot1": {
+        "class_type": "Store",
+        "description": "Budget friendly convenience store",
+        "item0": {
+            "class_type": "Item",
+            "description": "",
+            "name": "Sprite",
+            "price": 2.17,
+            "stock": 500
+        },
+        "item1": {
+            "class_type": "Item",
+            "description": "",
+            "name": "Hairdye",
+            "price": 14.99,
+            "stock": 320
+        },
+        "item2": {
+            "class_type": "Item",
+            "description": "",
+            "name": "Bandages",
+            "price": 3.99,
+            "stock": 450
+        },
+        "name": "Dollar General",
+        "square_feet": 1750
+    },
+    "plot2": {
+        "class_type": "Store",
+        "description": "Fast fashion apparel chain",
+        "item0": {
+            "class_type": "Item",
+            "description": "Black turtleneck",
+            "name": "Turtleneck",
+            "price": 34.99,
+            "stock": 25
+        },
+        "name": "H&M",
+        "square_feet": 3600
+    },
+    "plot3": {
+        "class_type": "Store",
+        "description": "Quality haircuts at a cheap price",
+        "item0": {
+            "class_type": "Service",
+            "description": "",
+            "end_time": "7:00 PM",
+            "name": "Haircut",
+            "price": 12.5,
+            "start_time": "8:00 AM"
+        },
+        "item1": {
+            "class_type": "Item",
+            "description": "",
+            "name": "Hairdye",
+            "price": 14.99,
+            "stock": 320
+        },
+        "name": "Great Clips",
+        "square_feet": 2200
+    },
+    "plot4": {
+        "class_type": "Department",
+        "description": "A place for customers to be aided in a number of issues",
+        "item0": {
+            "class_type": "Service",
+            "description": "Return lost items if they have been found on the premises",
+            "end_time": "9:30 PM",
+            "name": "Lost and Found",
+            "price": 0.0,
+            "start_time": "7:00 AM"
+        },
+        "name": "Customer Service",
+        "square_feet": 750
+    },
+    "plot5": {
+        "class_type": "Plot",
+        "description": "A dinosaur themed play place for children up to 9yrs",
+        "name": "Dino Playplace",
+        "square_feet": 500
+    }
+}
