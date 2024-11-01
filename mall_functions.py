@@ -26,7 +26,7 @@ def validate_yn(message: str):
     answer = input("\n" + message + " (Y or N):\t")         #Ex. "\nWould you like to load a save? (Y or N):\t"
     while answer.upper() != "Y" and answer.upper() != "N":
         answer = input("Invalid input. Please input a \"Y\" or \"N\":\t")
-    return answer
+    return answer.upper()
 
 
 """
