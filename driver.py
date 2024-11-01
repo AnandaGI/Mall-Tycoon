@@ -118,7 +118,7 @@ while run_program:
                         print("Plots do not have any products to edit.")
                         continue
 
-                    print("\nActions: \n1)\tAdd Product \n2)\tRemove Product \n3)\tEdit Product Stock/TimeSlots")
+                    print("\nActions: \n1)\tAdd Product \n2)\tRemove Product \n3)\tEdit Product")
                     product_option = validate_bounds("Enter option", 1, 3)
 
                     match product_option:
