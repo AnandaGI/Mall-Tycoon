@@ -114,6 +114,9 @@ while run_program:
                     if user_mall.num_items == 0:
                         print("No products to edit. To add products, first create them (Option 3 in Menu).")
                         continue
+                    elif active_store.__class__.__name__ == "Plot":
+                        print("Plots do not have any products to edit.")
+                        continue
 
                     print("\nActions: \n1)\tAdd Product \n2)\tRemove Product \n3)\tEdit Product Stock/TimeSlots")
                     product_option = validate_bounds("Enter option", 1, 3)
@@ -138,19 +141,19 @@ while run_program:
                         case 2:
                             print("Select a product from the following list to remove:")
                             active_store.display_catalog()
-                            user_choice = validate_bounds("Type the number of the product you wish to remove:",
+                            index = validate_bounds("Type the number of the product you wish to remove:",
                                                           1, user_mall.num_items)
 
-                            active_store.remove_product(user_choice-1)
+                            active_store.remove_product(active_store.get_product(index-1))
 
                         #Edit Product
                         case 3:
                             print("Select a product from the following list to edit:")
                             active_store.display_catalog()
                             user_choice = validate_bounds("Type the number of the product",
-                                                          1, user_mall.num_items)
+                                                          1, active_store.num_products)
 
-                            store_product = active_store.get_product(user_choice)
+                            store_product = active_store.get_product(user_choice-1)
                             store_product.print_stats()
 
                             print("\nWould you like to edit " + store_product.name + "'s" +
@@ -164,8 +167,11 @@ while run_program:
 
                             elif user_choice == 2:
                                 if isinstance(store_product, Item):
-                                    amount = validate_bounds("How much stock do you want to add or remove?",
-                                                             -store_product.stock, store_product.stock)
+                                    print("\nTo stock, input a positive amount. To destock, input a negative amount:\t")
+                                    print(store_product.name + "'s current stock: " + str(store_product.stock) + "units")
+                                    amount = int(input("Enter amount:\t" ))
+                                    while amount < -store_product.stock:
+                                        amount = int(input("Invalid amount. Enter a positive or negative integer:\t"))
 
                                     if amount >= 0:
                                         store_product.restock(amount)

@@ -67,8 +67,8 @@ class Retailer(Plot):
         self.__product_list.append(product)
         return 1
 
-    def remove_product(self, index: int):
-        self.__product_list.remove( self.get_product(index) )
+    def remove_product(self, product: Product):
+        self.__product_list.remove( product )
 
     def get_product(self, index: int):
         return self.__product_list[index]
@@ -146,8 +146,11 @@ class Department(Retailer):
             return 0
 
     def display_catalog(self):
-        print("\nHi, welcome to " + self.name + "!\nWe can provide you with the following services:")
-        self.list_type(Service)
+        if self.num_products == 0:
+            print("Hi, welcome to " + self.name + "!. Unfortunately, we are not currently equipped to provide services.")
+        else:
+            print("\nHi, welcome to " + self.name + "!\nWe can provide you with the following services:")
+            self.list_type(Service)
 
 
 """
