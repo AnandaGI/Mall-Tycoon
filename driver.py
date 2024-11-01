@@ -29,15 +29,15 @@ if len(saves) != 0 and validate_yn("Would you like to load a save first?") == "Y
     input("Save loaded successfully. Press Enter to begin.")
 
 else:
-    #print("\nWelcome to your very own Mall Planner! Add stores, items, and more!")
+    print("\nWelcome to your very own Mall Planner! Add stores, items, and more!")
     user_mall = Mall(input("\nFirst, let's start off with a name! It needs to be something catchy.\t"))
-    #print("\nHmm.", end = "")
+    print("\nHmm.", end = "")
 
-    #for i in range(0, 3):
-        #time.sleep(0.75)
-        #print(".", end = "")
+    for i in range(0, 3):
+        time.sleep(0.75)
+        print(".", end = "")
 
-    #input("\n\n" + user_mall.name + ", eh? That sounds great! Press ENTER to begin.")
+    input("\n\n" + user_mall.name + ", eh? That sounds great! Press ENTER to begin.")
 
 #Main Program Loop
 while run_program:

@@ -64,8 +64,10 @@ class Retailer(Plot):
         return len(self.__product_list)
 
     def add_product(self, product: Product):
-        self.__product_list.append(product)
-        return 1
+        if product not in self.__product_list:
+            self.__product_list.append(product)
+        else:
+            print("This product already exists in " + self.name + "'s catalog.")
 
     def remove_product(self, product: Product):
         self.__product_list.remove( product )
