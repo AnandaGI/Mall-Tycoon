@@ -46,9 +46,7 @@ while run_program:
     print("\nActions:")
     print("1)\tCreate New Plot \n2)\tEdit Existing Plot \n3)\tCreate New Items\n4)\tRecall Product\n5)\tLoad Data From File")
     print("6)\tSave Data To File\n7)\tDisplay Mall Data \n8)\tExit Program")
-    user_option = int(input("Choose option 1-8:\t"))
-    while user_option < 1 or user_option > 8:
-        user_option = int(input("Invalid choice. Must type a number 1-8:\t"))
+    user_option = validate_bounds("Invalid choice. Must type a number", 1, 8)
 
     """
     Execute Different Actions
@@ -60,7 +58,15 @@ while run_program:
             #Gain input for the name, description, and type of store.
             plot_name = input("\nWhat is your new plot's name?\t")
             plot_description = input("Give a short description of your plot:\t")
-            plot_sqr_feet = int(input("How large is your plot in square feet? Enter an integer:\t"))
+            try:
+                plot_sqr_feet = int(input("How large is your plot in square feet? Enter an integer:\t"))
+            except:
+                plot_sqr_feet = 0
+                while plot_sqr_feet <= 0:
+                    try:
+                        plot_sqr_feet = int(input("Invalid choice. Must type a positive integer:\t"))
+                    except:
+                        pass
             print("Store type: \n1)\tRetail/Service store \n2)\tRestaurant \n3)\tMall department \n4)\tPlot")
             plot_type = validate_bounds("Type your plot's type", 1, 4)
 

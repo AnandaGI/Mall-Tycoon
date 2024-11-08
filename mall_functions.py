@@ -16,9 +16,17 @@ def validate_bounds(message: str, lower_bound: int, upper_bound: int, zero_exit=
     else:
         message = "\n" + message + " (" + str(lower_bound) + " - " + str(upper_bound) + ")"
 
-    answer = int(input(message + ":\t"))
-    while answer < lower_bound or answer > upper_bound:
-        answer = int(input("Invalid choice. Must type a number " + str(lower_bound) + " - " + str(upper_bound) + ":\t"))
+    try:
+        answer = int(input(message + ":\t"))
+        while answer < lower_bound or answer > upper_bound:
+            answer = int(input("Invalid choice. Must type a number (" + str(lower_bound) + " - " + str(upper_bound) + "):\t"))
+    except:
+        answer = -1
+        while answer < lower_bound or answer > upper_bound:
+            try:
+                answer = int(input("Invalid choice. Must type a number (" + str(lower_bound) + " - " + str(upper_bound) + "):\t"))
+            except:
+                pass
     return answer
 
 #Validates a yes or no question until, looping until a Y or N is given.
