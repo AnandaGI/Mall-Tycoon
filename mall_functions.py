@@ -148,8 +148,8 @@ def print_mall(mall: Mall):
 |       ||       ||       ||       ||       ||       ||       |
 |   1   ||   2   ||   3   ||   4   ||   5   ||   6   ||   7   |
 |       ||       ||       ||       ||       ||       ||       |
----   ------   ------   ------   ------   ------   ------   ---
-                            Walkway                            <-(Entrance)"""
+|--   ------   ------   ------   ------   ------   ------   ---
+|                           Walkway                            <-(Entrance)"""
     )
 
     if mall.max_plots >= 10:            #First upgrade?
@@ -166,7 +166,7 @@ def print_mall(mall: Mall):
 |                                 10     |
 |                       |  |             |
 |                       |  |             |      (Entrance)
--------------------------  --------------------------   -------"""
+|------------------------  --------------------------   -------"""
         )
     else:
         print("-" * 63)
@@ -218,6 +218,6 @@ def print_mall(mall: Mall):
 #Mall Tiers for number of plots allowed in the mall
 mall_tier_1 = 10
 mall_tier_2 = 15
-mall_tier_3 = 25
+mall_tier_3 = 25 #Current Max Tier
 mall_tier_4 = 40
 mall_tier_5 = 65 #Probably not going to use

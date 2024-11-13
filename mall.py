@@ -90,7 +90,7 @@ class Mall:
 
     def display_products(self):
         print("\nAll Previous Products\n" + ("-" * 20))
-        if self.num_stores == 0:
+        if self.num_items == 0:
             print("There are no products in your mall yet.")
         else:
             i = 1
