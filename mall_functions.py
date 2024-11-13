@@ -20,12 +20,12 @@ def validate_bounds(message: str, lower_bound: int, upper_bound: int, zero_exit=
         answer = int(input(message + ":\t"))
         while answer < lower_bound or answer > upper_bound:
             answer = int(input("Invalid choice. Must type a number (" + str(lower_bound) + " - " + str(upper_bound) + "):\t"))
-    except:
+    except ValueError:
         answer = -1
         while answer < lower_bound or answer > upper_bound:
             try:
                 answer = int(input("Invalid choice. Must type a number (" + str(lower_bound) + " - " + str(upper_bound) + "):\t"))
-            except:
+            except ValueError:
                 pass
     return answer
 
@@ -44,7 +44,7 @@ which are in the form of a json file. This then returns a mall class
 def load_mall(save_dest: str):
     with open(save_dest, "r") as f:
         data = json.load(f)
-    user_mall = Mall(data["mall_name"], data["recalls"])
+    user_mall = Mall(data["mall_name"], data["recalls"], int(data["max_plots"]))
 
     i = 0
     while "plot" + str(i) in data:
@@ -83,7 +83,7 @@ save_mall() takes in a file destination and the mall object, saving all of its c
 to a json file in the /saves/ directory, where it can be loaded later
 """
 def save_mall(save_dest: str, user_mall: Mall):
-    save_data = {"mall_name": user_mall.name, "recalls": user_mall.recalls}
+    save_data = {"mall_name": user_mall.name, "recalls": user_mall.recalls, "max_plots": user_mall.max_plots}
 
     i = 0
     for plot in user_mall.plot_list:
@@ -135,3 +135,89 @@ def copy_product(product: Product):
         return Service(product.name, product.description, product.price, new_start, new_end)
     else:
         return Product(product.name, product.description)
+
+"""
+print_mall()
+"""
+def print_mall(mall: Mall):
+    print(
+"""###############################################################
+###############################################################
+
+-----##-------##-------##-------##-------##-------##-------##--
+|       ||       ||       ||       ||       ||       ||       |
+|   1   ||   2   ||   3   ||   4   ||   5   ||   6   ||   7   |
+|       ||       ||       ||       ||       ||       ||       |
+|--   ------   ------   ------   ------   ------   ------   ---
+|                           Walkway                            <-(Entrance)"""
+    )
+
+    if mall.max_plots >= 10:            #First upgrade?
+        print(
+"""|----------   -----------  ------   -----------------   -------
+|                       |  |             |      (Entrance)
+|                       |  |             |
+|                                 9      |
+|                       |  |             |
+|                       |  |             |
+|           8           |  |---------  --|      Courtyard      
+|                       |  |             |
+|                       |  |             |
+|                                 10     |
+|                       |  |             |
+|                       |  |             |      (Entrance)
+|------------------------  --------------------------   -------"""
+        )
+    else:
+        print("-" * 63)
+
+    if mall.max_plots >= 15:
+        print(
+"""|                           Walkway                            <-(Entrance)
+|       ----   ------   ------   ------   ------   ----       |
+|       ||       ||       ||       ||       ||       ||       |
+|       ||   11  ||   12  ||   13  ||   14  ||   15  ||       |
+|       ||       ||       ||       ||       ||       ||       |
+|       ------##-------##-------##-------##-------##---       |"""
+        )
+
+    if mall.max_plots >= 25:
+        print(
+"""|                                                             |
+|                                                             |
+|-----------------                           -----------------|
+#       16       |                           |       25       #
+|                |                           |                |
+|----------------|                           |----------------|
+#       17       |        Food Court         |       24       #
+|                |                           |                |
+|----------------|                           |----------------|
+#       18       |                           |       23       #
+|                |                           |                |
+|----------------|------------------------   |----------------|
+                 |     |     |     |     |   |
+                 |  19 |  20 |  21 |  22 |   |
+                 |     |     |     |     |   |
+                 |     |     |     |     |   |"""
+        )
+    else:
+        print("|" + " "*61 + "|\n|" + "-"*61 + "|")
+
+    if mall.max_plots >= 40:
+        pass
+    else:
+        print("                 |-----|-----|-----|-----|###| <-(Emergency Exit)")
+
+    print("\n" + ("#"*63 + "\n")*2)
+
+    print("Store Key:")
+    for i in range(0, mall.num_stores):
+        print(str(i+1) + ".\t" + mall.plot_list[i].name)
+
+
+#Mall Tiers for number of plots allowed in the mall
+mall_tier_1 = 10
+mall_tier_2 = 15
+mall_tier_3 = 25 #Current Max Tier
+mall_tier_4 = 40
+mall_tier_5 = 65 #Probably not going to use
