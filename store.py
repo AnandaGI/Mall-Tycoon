@@ -6,7 +6,7 @@ Updated:    10/14/2024
 from product import *
 
 class Plot:
-    def __init__(self, name: str, description: str, square_feet: int):
+    def __init__(self, name: str, description: str, square_feet: int = 2000):
         self.__name = name
         self.__description = description
         self.__square_feet = square_feet

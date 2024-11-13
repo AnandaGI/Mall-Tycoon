@@ -59,7 +59,7 @@ def load_mall(save_dest: str):
                 new_plot = Restaurant(name, description, sqr_feet, p_dict["seats"])
             case _: #Department
                 new_plot = Department(name, description, sqr_feet)
-        user_mall.add_store(new_plot)
+        user_mall.add_store(new_plot, i)
 
         n = 0
         while "item" + str(n) in p_dict:
@@ -144,7 +144,7 @@ def print_mall(mall: Mall):
 """###############################################################
 ###############################################################
 
------##-------##-------##-------##-------##-------##-------##--
+|----##-------##-------##-------##-------##-------##-------##--
 |       ||       ||       ||       ||       ||       ||       |
 |   1   ||   2   ||   3   ||   4   ||   5   ||   6   ||   7   |
 |       ||       ||       ||       ||       ||       ||       |
@@ -152,7 +152,8 @@ def print_mall(mall: Mall):
 |                           Walkway                            <-(Entrance)"""
     )
 
-    if mall.max_plots >= 10:            #First upgrade?
+    #FIRST UPGRADE
+    if mall.max_plots >= 10:
         print(
 """|----------   -----------  ------   -----------------   -------
 |                       |  |             |      (Entrance)
@@ -168,21 +169,21 @@ def print_mall(mall: Mall):
 |                       |  |             |      (Entrance)
 |------------------------  --------------------------   -------"""
         )
-    else:
-        print("-" * 63)
 
-    if mall.max_plots >= 15:
-        print(
+        #SECOND UPGRADE
+        if mall.max_plots >= 15:
+            print(
 """|                           Walkway                            <-(Entrance)
 |       ----   ------   ------   ------   ------   ----       |
 |       ||       ||       ||       ||       ||       ||       |
 |       ||   11  ||   12  ||   13  ||   14  ||   15  ||       |
 |       ||       ||       ||       ||       ||       ||       |
 |       ------##-------##-------##-------##-------##---       |"""
-        )
+            )
 
-    if mall.max_plots >= 25:
-        print(
+            #THIRD UPGRADE
+            if mall.max_plots >= 25:
+                print(
 """|                                                             |
 |                                                             |
 |-----------------                           -----------------|
@@ -199,20 +200,20 @@ def print_mall(mall: Mall):
                  |  19 |  20 |  21 |  22 |   |
                  |     |     |     |     |   |
                  |     |     |     |     |   |"""
-        )
-    else:
-        print("|" + " "*61 + "|\n|" + "-"*61 + "|")
+                )
+                # FINAL UPGRADE
+                if mall.max_plots >= 40:
+                    pass
+                else:
+                    print("                 |-----|-----|-----|-----|###| <-(Emergency Exit)")
 
-    if mall.max_plots >= 40:
-        pass
+            else:
+                print("|" + " " * 61 + "|\n|" + "-" * 61 + "|")
     else:
-        print("                 |-----|-----|-----|-----|###| <-(Emergency Exit)")
+        print("|" + "-" * 62)
 
     print("\n" + ("#"*63 + "\n")*2)
-
-    print("Store Key:")
-    for i in range(0, mall.num_stores):
-        print(str(i+1) + ".\t" + mall.plot_list[i].name)
+    mall.print_keys()
 
 
 #Mall Tiers for number of plots allowed in the mall
