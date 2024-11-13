@@ -4,7 +4,6 @@ Purpose:    Driver file for the tycoon game.
 Updated:    10/14/2024
 """
 from mall_functions import *
-from product import *
 from store import *
 from mall import Mall
 import time, os
@@ -103,7 +102,7 @@ while run_program:
             active_store = user_mall.get_store(store_choice-1)
             print("\nNow editing " + active_store.name + ".")
 
-            print("Options: \n1)\tEdit Name \n2)\tEdit Description \n3)\tEdit Items/Services \n4)\tRemove Current Plot")
+            print("Options: \n1)\tRebrand \n2)\tEdit Description \n3)\tEdit Items/Services \n4)\tDemolish Current Plot")
             store_option = validate_bounds("Enter option", 1, 4)
 
             #Go through options for store
@@ -250,8 +249,7 @@ while run_program:
         #Save Data To File
         #CASE 6, save data to a set of new text files
         case 6:
-            curr_dir = os.path.dirname(os.path.realpath(__file__))
-            save_dest = curr_dir + "/saves/" + input("\nWhat would you like to call your save?\t") + ".json"
+            save_dest = save_dir + "/saves/" + input("\nWhat would you like to call your save?\t") + ".json"
             if os.path.exists(save_dest):
                 if validate_yn("Save with this name already exists. Would you like to overwrite?") == "N":
                     continue
@@ -266,8 +264,8 @@ while run_program:
         case 7:
 
             print("\nDisplay Options: \n1)\tShorthand \n2)\tAll plot info \n3)\tSpecific Store Info" +
-                  "\n4)\tMall Statistics", end="")
-            user_choice = validate_bounds("Enter option", 1, 4)
+                  "\n4)\tMall Statistics \n5)\tASCII Representation", end="")
+            user_choice = validate_bounds("Enter option", 1, 5)
 
             if user_choice != 4 and user_mall.num_stores == 0:  #If the user wants to display store info
                 print("\nThere are no stores to display.")
@@ -292,6 +290,8 @@ while run_program:
                         total_area += plot.square_feet
                     print("Combined area of stores:\t" + str(total_area) + " square feet")
                     print("Recalled items:\t" + str(user_mall.recalls))
+                case 5:
+                    print_mall(user_mall)
             print()     #Newline
             #End of Case 7
 

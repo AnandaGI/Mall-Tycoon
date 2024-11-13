@@ -10,11 +10,12 @@ import json
 
 #ADD SLOTS TO THE MALL SO THAT YOU CAN START HAVE A STARTER MALL
 class Mall:
-    def __init__(self, name: str, recalls: int = 0):
+    def __init__(self, name: str, recalls: int = 0, max_plots: int = 7):
         self.__name = name
         self.__plot_list = []          #List of stores
         self.__all_products = []        #All products that have been created during the course of the mall's lifespan
         self.__recalls = recalls
+        self.__max_plots = max_plots    #Maximum number of plots in a mall, can be upgraded.
 
     """
     Properties
@@ -38,6 +39,10 @@ class Mall:
     @property
     def recalls(self):
         return self.__recalls
+
+    @property
+    def max_plots(self):
+        return self.__max_plots
 
     """
     Functions
