@@ -42,9 +42,13 @@ load_mall() takes in a file destination and reads in its contents,
 which are in the form of a json file. This then returns a mall class
 """
 def load_mall(save_dest: str):
-    with open(save_dest, "r") as f:
-        data = json.load(f)
-    user_mall = Mall(data["mall_name"], data["recalls"], int(data["max_plots"]))
+    try:
+        with open(save_dest, "r") as f:
+            data = json.load(f)
+        user_mall = Mall(data["mall_name"], data["recalls"], int(data["max_plots"]))
+    except json.decoder.JSONDecodeError:
+        print("The chosen file is corrupted or otherwise unreadable.")
+        return None
 
     i = 0
     while "plot" + str(i) in data:

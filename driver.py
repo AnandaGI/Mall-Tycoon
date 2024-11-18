@@ -13,18 +13,19 @@ run_program = True
 #Beginning of Program - Get the Mall Name
 save_dir = os.path.dirname(os.path.realpath(__file__)) + "/saves/"
 saves = os.listdir(save_dir)
+user_mall = None
 
 if len(saves) != 0 and validate_yn("Would you like to load a save first?") == "Y":  #If there are no saves, don't bother loading
     print("\nThe following saves are available to load from:")
-    i = 1
-    for save in saves:
-        print(str(i) + ")\t" + save.replace(".json", ""))
-        i += 1
-    user_index = validate_bounds("Please type the number of the save you wish to load.",
-                                 1, len(saves))
+    for i in range(0, len(saves)):
+        print(str(i + 1) + ")\t" + saves[i].replace(".json", ""))
 
-    save_dest = save_dir + saves[user_index - 1]
-    user_mall = load_mall(save_dest)
+    while user_mall is None:
+        user_index = validate_bounds("Please type the number of the save you wish to load.",
+                                     1, len(saves))
+
+        save_dest = save_dir + saves[user_index - 1]
+        user_mall = load_mall(save_dest)
     input("Save loaded successfully. Press Enter to begin.")
 
 else:
