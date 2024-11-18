@@ -45,7 +45,7 @@ while run_program:
     print("\nActions:")
     print("1)\tCreate New Plot \n2)\tEdit Existing Plot \n3)\tCreate New Items\n4)\tMall Functions")
     print("5)\tLoad Data From File \n6)\tSave Data To File\n7)\tDisplay Mall Data \n8)\tExit Program")
-    user_option = validate_bounds("Invalid choice. Must type a number", 1, 8)
+    user_option = validate_bounds("Please type a number.", 1, 8)
 
     """
     Execute Different Actions
