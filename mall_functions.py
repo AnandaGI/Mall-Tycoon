@@ -59,7 +59,7 @@ def load_mall(save_dest: str):
                 new_plot = Restaurant(name, description, sqr_feet, p_dict["seats"])
             case _: #Department
                 new_plot = Department(name, description, sqr_feet)
-        user_mall.add_store(new_plot)
+        user_mall.add_store(new_plot, i)
 
         n = 0
         while "item" + str(n) in p_dict:
@@ -137,87 +137,78 @@ def copy_product(product: Product):
         return Product(product.name, product.description)
 
 """
+cut_center()
+"""
+def cut_center(string: str, width: int):
+    return string[0:width].center(width)
+
+"""
 print_mall()
 """
 def print_mall(mall: Mall):
-    print(
-"""###############################################################
-###############################################################
+    plots = mall.plot_list
+    tier_1_plots = ""
+    for i in range(0, 7):
+        tier_1_plots += "|" + cut_center(plots[i].name, 17) + "|"
 
------##-------##-------##-------##-------##-------##-------##--
-|       ||       ||       ||       ||       ||       ||       |
-|   1   ||   2   ||   3   ||   4   ||   5   ||   6   ||   7   |
-|       ||       ||       ||       ||       ||       ||       |
-|--   ------   ------   ------   ------   ------   ------   ---
-|                           Walkway                            <-(Entrance)"""
-    )
+    print( ("#"*133 + "\n")*2 + "\n" +
+           "|----##-----------|"*7 + "\n" + "|                 |" * 7 + "\n" +
+           tier_1_plots + "\n" + "|                 |" * 7 + "\n" + "|----   ----------|"*7 +
+           "\n|" + "Walkway".center(129) + " <--Entrance")
 
-    if mall.max_plots >= 10:            #First upgrade?
-        print(
-"""|----------   -----------  ------   -----------------   -------
-|                       |  |             |      (Entrance)
-|                       |  |             |
-|                                 9      |
-|                       |  |             |
-|                       |  |             |
-|           8           |  |---------  --|      Courtyard      
-|                       |  |             |
-|                       |  |             |
-|                                 10     |
-|                       |  |             |
-|                       |  |             |      (Entrance)
-|------------------------  --------------------------   -------"""
-        )
+    #FIRST UPGRADE
+    if mall.max_plots >= 10:
+        wall = "\n|" + " "*50 + "|      |" + " "*25 + "|"
+        print("|" + "-"*22 + "      " + "-"*23 + "      " + "-"*12 + "   " + "-"*59 + "|" +
+              wall*2 + ("\n|" + " "*59 + cut_center(plots[8].name,24) + "|") + wall*3 +
+              "\n|" + cut_center(plots[7].name, 50) + "|      |" + "-"*22 + "##-|" + "Courtyard".center(40) +
+              wall*3 + "\n|" + " "*59 + cut_center(plots[8].name,24) + "|" + wall*2)
+
+        #SECOND UPGRADE
+        if mall.max_plots >= 15:
+            tier_3_plots = "\n|      "
+            for i in range(10, 15):
+                tier_3_plots += "|" + cut_center(plots[i].name, 17) + "|"
+            print("|" + "-"*22 + "      " + "-"*23 + "      " + "-"*12 + "   " + "-"*35 + "|" +
+                  "\n|" + "Walkway".center(106) + " <--Entrance" + "\n|      " + "|-------   -------|"*5 + "      |" +
+                  ("\n|      " + ("|" + " "*17 + "|")*5 + "      |")*2 + tier_3_plots + "      |" +
+                  ("\n|      " + ("|" + " "*17 + "|")*5 + "      |")*2 + "\n|      " + "|-------------##--|" * 5 +
+                  "      |" + "\n|" + " "*107 + "|")
+
+            #THIRD UPGRADE (Current Final)
+            if mall.max_plots >= 25:
+                top_tier_3_plots, last_tier_3_plots = "", " "*26
+                #For Plots 16 - 18 and 23 - 25
+                for i in range(0, 3):
+                    top_tier_3_plots += ("|" + "-"*25 + "|" + " "*55 + "|" + "-"*25 + "|"
+                                         "\n#" + cut_center(plots[14+i].name, 25) + "|" + " "*55 +    #Left Store
+                                         "|" + cut_center(plots[24 - i].name, 25) + "#" +           #Right Store
+                                         ("\n|" + " "*25 + "|" + " "*55 + "|" + " "*25 + "|")*2 + "\n")
+                top_tier_3_plots += "|" + "-"*25 + "|" + "-"*50 + "|    |" + "-"*25 + "|\n"
+
+                # For Plots 19 - 22
+                for i in range(18, 22):
+                    last_tier_3_plots += "|" + cut_center(plots[i].name, 11) + "|"
+
+                print(top_tier_3_plots + (" "*26 +("|" + " "*11 + "|")*4 + "    |\n")*2 + last_tier_3_plots +
+                      "    |\n" + (" "*26 +("|" + " "*11 + "|")*4 + "    |\n")*2 + " "*26 +
+                      ("|" + "-"*11 + "|")*4 + "####| <-(Emergency Exit)" )
+
+            else:
+                print("|" + "-" * 107 + "|")
+
+        else:
+            print("|" + "-"*50 + "|------|" +"-"*25 + "|")
+
     else:
-        print("-" * 63)
+        print("|" + "-" * 131 + "|")
 
-    if mall.max_plots >= 15:
-        print(
-"""|                           Walkway                            <-(Entrance)
-|       ----   ------   ------   ------   ------   ----       |
-|       ||       ||       ||       ||       ||       ||       |
-|       ||   11  ||   12  ||   13  ||   14  ||   15  ||       |
-|       ||       ||       ||       ||       ||       ||       |
-|       ------##-------##-------##-------##-------##---       |"""
-        )
-
-    if mall.max_plots >= 25:
-        print(
-"""|                                                             |
-|                                                             |
-|-----------------                           -----------------|
-#       16       |                           |       25       #
-|                |                           |                |
-|----------------|                           |----------------|
-#       17       |        Food Court         |       24       #
-|                |                           |                |
-|----------------|                           |----------------|
-#       18       |                           |       23       #
-|                |                           |                |
-|----------------|------------------------   |----------------|
-                 |     |     |     |     |   |
-                 |  19 |  20 |  21 |  22 |   |
-                 |     |     |     |     |   |
-                 |     |     |     |     |   |"""
-        )
-    else:
-        print("|" + " "*61 + "|\n|" + "-"*61 + "|")
-
-    if mall.max_plots >= 40:
-        pass
-    else:
-        print("                 |-----|-----|-----|-----|###| <-(Emergency Exit)")
-
-    print("\n" + ("#"*63 + "\n")*2)
-
-    print("Store Key:")
-    for i in range(0, mall.num_stores):
-        print(str(i+1) + ".\t" + mall.plot_list[i].name)
+    print("\n" + ("#"*133 + "\n")*2)
+    mall.print_keys()
 
 
 #Mall Tiers for number of plots allowed in the mall
-mall_tier_1 = 10
-mall_tier_2 = 15
-mall_tier_3 = 25 #Current Max Tier
-mall_tier_4 = 40
-mall_tier_5 = 65 #Probably not going to use
+#mall_tier_1 = 10
+#mall_tier_2 = 15
+#mall_tier_3 = 25 #Current Max Tier
+#Second Floors??

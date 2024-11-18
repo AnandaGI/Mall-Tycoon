@@ -3,16 +3,16 @@ Creator:    Ananda Irwin
 Purpose:    Create stores, which sell items, services, or both
 Updated:    10/14/2024
 """
-
 from store import Plot
 from product import Product
 import json
+from math import ceil
 
 #ADD SLOTS TO THE MALL SO THAT YOU CAN START HAVE A STARTER MALL
 class Mall:
     def __init__(self, name: str, recalls: int = 0, max_plots: int = 7):
         self.__name = name
-        self.__plot_list = []          #List of stores
+        self.__plot_list = [Plot(" ", "", 0) for i in range(0,25)]          #List of stores
         self.__all_products = []        #All products that have been created during the course of the mall's lifespan
         self.__recalls = recalls
         self.__max_plots = max_plots    #Maximum number of plots in a mall, can be upgraded.
@@ -47,8 +47,8 @@ class Mall:
     """
     Functions
     """
-    def add_store(self, plot: Plot):
-        self.__plot_list.append(plot)
+    def add_store(self, plot: Plot, index):
+        self.__plot_list[index] = plot
 
     def get_store(self, index):
         return self.__plot_list[index]
@@ -60,6 +60,9 @@ class Mall:
         if not product in self.__all_products:    #Don't add if product exists already
             self.__all_products.append(product)
 
+    """
+    Try Except???
+    """
     #This will go through all the stores and delete all instances of some particular product
     def recall_product(self, product: Product):
         for store in self.__plot_list:
@@ -70,8 +73,8 @@ class Mall:
                         self.__recalls += 1
         self.__all_products.remove(product) #Also removes the product from the mall itself
 
-    def remove_plot(self, plot: Plot):
-        self.__plot_list.remove(plot)
+    def remove_plot(self, index):
+        self.__plot_list[index] = Plot("_", "", 0)
 
     def display_mall(self):
         print("\n" + self.name + " Current Plots\n" + ("-"*20))
@@ -83,11 +86,6 @@ class Mall:
         for plot in self.__plot_list:
             plot.display_catalog()
 
-    def display_numbered_plots(self):
-        print("\n" + self.name + " Current Plot List\n" + ("-" * 20))
-        for i in range(0, self.num_stores):
-            print((i+1), ")\t", self.__plot_list[i].name)
-
     def display_products(self):
         print("\nAll Previous Products\n" + ("-" * 20))
         if self.num_items == 0:
@@ -97,3 +95,43 @@ class Mall:
             for product in self.__all_products:
                 print(i, ")\t", product.name)
                 i += 1
+
+    def print_keys(self):
+        print("Store Key:")
+        for i in range(0, int(self.__max_plots/2)):
+            j = ceil(self.__max_plots/2 + i)
+            print(str(i+1) + ".\t" + self.__plot_list[i].name.ljust(30) +
+                  str(j) + ".\t" + self.__plot_list[j].name.ljust(30))
+        if self.__max_plots % 2 == 1:
+            print("\t"+ " ".center(30) +
+                  str(self.__max_plots) + ".\t" + self.__plot_list[self.__max_plots-1].name.ljust(20))
+
+    def upgrade(self):
+        match self.__max_plots:
+            case 7:
+                self.__max_plots = 10
+                #for i in range(7, 10):
+                #    self.add_store(Plot("None", "", 0), i)
+            case 10:
+                self.__max_plots = 15
+            case 15:
+                self.__max_plots = 25
+            case 25:
+                print("Currently at max tier.")
+
+    def downgrade(self):
+        match self.__max_plots:
+            case 7:
+                print("Currently at lowest tier.")
+            case 10:
+                self.__max_plots = 7
+                for i in range(7, 10):
+                    self.remove_plot(i)
+            case 15:
+                self.__max_plots = 10
+                for i in range(10, 15):
+                    self.remove_plot(i)
+            case 25:
+                self.__max_plots = 15
+                for i in range(15, 25):
+                    self.remove_plot(i)

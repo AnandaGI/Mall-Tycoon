@@ -28,24 +28,24 @@ if len(saves) != 0 and validate_yn("Would you like to load a save first?") == "Y
     input("Save loaded successfully. Press Enter to begin.")
 
 else:
-    print("\nWelcome to your very own Mall Planner! Add stores, items, and more!")
+    #print("\nWelcome to your very own Mall Planner! Add stores, items, and more!")
     user_mall = Mall(input("\nFirst, let's start off with a name! It needs to be something catchy.\t"))
-    print("\nHmm.", end = "")
+    #print("\nHmm.", end = "")
 
-    for i in range(0, 3):
-        time.sleep(0.75)
-        print(".", end = "")
+    #for i in range(0, 3):
+     #   time.sleep(0.75)
+      #  print(".", end = "")
 
-    input("\n\n" + user_mall.name + ", eh? That sounds great! Press ENTER to begin.")
+    #input("\n\n" + user_mall.name + ", eh? That sounds great! Press ENTER to begin.")
 
 #Main Program Loop
 while run_program:
 
     #ADD A SIMULATE DAY FUNCTION
     print("\nActions:")
-    print("1)\tCreate New Plot \n2)\tEdit Existing Plot \n3)\tCreate New Items\n4)\tRecall Product\n5)\tLoad Data From File")
-    print("6)\tSave Data To File\n7)\tDisplay Mall Data \n8)\tExit Program")
-    user_option = validate_bounds("Invalid choice. Must type a number", 1, 8)
+    print("1)\tCreate New Plot \n2)\tEdit Existing Plot \n3)\tCreate New Items\n4)\tMall Functions")
+    print("5)\tLoad Data From File \n6)\tSave Data To File\n7)\tDisplay Mall Data \n8)\tExit Program")
+    user_option = validate_bounds("Please type a number.", 1, 8)
 
     """
     Execute Different Actions
@@ -54,18 +54,24 @@ while run_program:
         #Create New Plot
         #CASE 1, The user will add a new store to the mall.
         case 1:
-            #Gain input for the name, description, and type of store.
+            user_mall.print_keys()
+            index = validate_bounds("Which slot should your plot go in?", 1, user_mall.max_plots) - 1
+
+            #Get input for the name, description, and type of store.
             plot_name = input("\nWhat is your new plot's name?\t")
             plot_description = input("Give a short description of your plot:\t")
+            """
             try:
                 plot_sqr_feet = int(input("How large is your plot in square feet? Enter an integer:\t"))
-            except:
+            except ValueError:
                 plot_sqr_feet = 0
                 while plot_sqr_feet <= 0:
                     try:
                         plot_sqr_feet = int(input("Invalid choice. Must type a positive integer:\t"))
-                    except:
+                    except ValueError:
                         pass
+            """
+            plot_sqr_feet = 2000    #TEMP VALUE
             print("Store type: \n1)\tRetail/Service store \n2)\tRestaurant \n3)\tMall department \n4)\tPlot")
             plot_type = validate_bounds("Type your plot's type", 1, 4)
 
@@ -83,7 +89,7 @@ while run_program:
                 case _:
                     new_plot = Plot(plot_name, plot_description, plot_sqr_feet)
 
-            user_mall.add_store(new_plot)  #Add new store to the mall
+            user_mall.add_store(new_plot, index)  #Add new store to the mall
             print("\n" + new_plot.name + " has been successfully added to " + user_mall.name)
             #End of Case 2
 
@@ -95,11 +101,11 @@ while run_program:
                 print("\nThere are no stores in your mall yet.")
                 continue
 
-            user_mall.display_numbered_plots()
+            user_mall.print_keys()
             store_choice = validate_bounds("Which store would you like to edit?",
-                                           1, user_mall.num_stores)
+                                           1, user_mall.num_stores) - 1
 
-            active_store = user_mall.get_store(store_choice-1)
+            active_store = user_mall.get_store(store_choice)
             print("\nNow editing " + active_store.name + ".")
 
             print("Options: \n1)\tRebrand \n2)\tEdit Description \n3)\tEdit Items/Services \n4)\tDemolish Current Plot")
@@ -189,7 +195,7 @@ while run_program:
                                     store_product.end = input(
                                         "What is the ending period your service is offered? (Format: XX:XX PM)\t")
                 case 4:
-                    user_mall.remove_plot(active_store)
+                    user_mall.remove_plot(store_choice)
             #End of Case 2
 
 
@@ -206,18 +212,34 @@ while run_program:
                 #End of Case 3
 
 
-        #Recall Products
+        #Mall Functions
         #Case 4, recall products and remove them from all stores
         case 4:
-            if user_mall.num_items == 0:
-                print("No products to recall.")
-                continue
+            print("\nActions: \n1)\tRecall Product \n2)\tUpgrade Mall \n3)\tDowngrade Mall")
+            action_option = validate_bounds("Enter option", 1, 3)
 
-            user_mall.display_products()
-            index = validate_bounds("Type the number of the product you wish to recall:",
-                                    1, user_mall.num_items)
+            match action_option:
+                case 1:
+                    if user_mall.num_items == 0:
+                        print("No products to recall.")
+                        continue
 
-            user_mall.recall_product( user_mall.get_item(index-1) )
+                    user_mall.display_products()
+                    index = validate_bounds("Type the number of the product you wish to recall:",
+                                            1, user_mall.num_items)
+
+                    user_mall.recall_product( user_mall.get_item(index-1) )
+
+                case 2:
+                    user_mall.upgrade()
+                    print("Mall upgraded, maximum plots increased to: " + str(user_mall.max_plots))
+
+                case 3:
+                    print("Plots in slots that are removed will be lost forever.")
+                    if validate_yn("Do you wish to proceed?") == "Y":
+                        user_mall.downgrade()
+                    else:
+                        print("Downgrade canceled.")
             #End of Case 4
 
 
@@ -277,7 +299,7 @@ while run_program:
                 case 2:
                     user_mall.display_all_plots()
                 case 3:
-                    user_mall.display_numbered_plots()
+                    user_mall.print_keys()
                     store_choice = validate_bounds("Which store would you like to see?",
                                                    1, user_mall.num_stores)
                     user_mall.get_store(store_choice-1).display_catalog()
