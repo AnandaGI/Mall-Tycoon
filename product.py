@@ -20,7 +20,8 @@ class Product:
         return {
             "class_type": self.__class__.__name__,
             "name": self.__name,
-            "description": self.__description
+            "description": self.__description,
+            "price": self.__price
         }
 
     def __eq__(self, other):
@@ -65,7 +66,6 @@ class Item(Product):
 
     def __dict__(self):
         item_dict = super().__dict__()
-        item_dict["price"] = self.price
         item_dict["stock"] = self.__stock
         return item_dict
 
@@ -94,7 +94,6 @@ class Service(Product):
 
     def __dict__(self):
         item_dict = super().__dict__()
-        item_dict["price"] = self.price
         item_dict["start_time"] = self.__start_time
         item_dict["end_time"] = self.__end_time
         return item_dict
@@ -119,8 +118,6 @@ class Service(Product):
     def end(self, new_end: str):
         self.__end_time = new_end
 
-
     def print_stats(self):
         super().print_stats()
-        print("Price: " + str(self.price))
         print("Starting Availability: " + self.__start_time + "\nEnding Availability: " + self.__end_time)

@@ -175,6 +175,8 @@ while run_program:
 
                             if user_choice == 1:
                                 new_price = float(input("Please input a new price for " + store_product.name + ":\t"))
+                                while new_price < 0:
+                                    new_price = float(input("Invalid Price. Please input a positive price:\t"))
                                 store_product.price = new_price
 
                             elif user_choice == 2:

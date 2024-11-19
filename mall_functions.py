@@ -29,6 +29,7 @@ def validate_bounds(message: str, lower_bound: int, upper_bound: int, zero_exit=
                 pass
     return answer
 
+
 #Validates a yes or no question until, looping until a Y or N is given.
 def validate_yn(message: str):
     answer = input("\n" + message + " (Y or N):\t")         #Ex. "\nWould you like to load a save? (Y or N):\t"
@@ -115,6 +116,8 @@ def create_product():
     while product_type < 1 or product_type > 2:
         product_type = input("\nInvalid option. Is your product an item or a service?\t")
     product_price = float(input("What is your product's price:\t"))
+    while product_price < 0:
+        product_price = float(input("Invalid Price. Please input a positive price:\t"))
 
     if product_type == 1:
         return Item(product_name, product_description, product_price)
