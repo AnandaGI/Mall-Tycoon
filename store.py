@@ -51,7 +51,7 @@ class Plot:
 Generic Store Class, subclass of a simple plot
 """
 class Retailer(Plot):
-    def __init__(self, name: str, description: str, square_feet: int):
+    def __init__(self, name: str, description: str, square_feet: int = 2000):
         super().__init__(name, description, square_feet)
         self.__product_list = []
 
