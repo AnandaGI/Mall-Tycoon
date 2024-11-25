@@ -6,7 +6,7 @@ Updated:    10/14/2024
 from store import Plot
 from product import Product
 import json
-from math import ceil
+from math import floor
 
 #ADD SLOTS TO THE MALL SO THAT YOU CAN START HAVE A STARTER MALL
 class Mall:
@@ -99,12 +99,11 @@ class Mall:
     def print_keys(self):
         print("Store Key:")
         for i in range(0, int(self.__max_plots/2)):
-            j = ceil(self.__max_plots/2 + i)
+            j = floor(self.__max_plots/2) + i
             print(str(i+1) + ".\t" + self.__plot_list[i].name.ljust(30) +
-                  str(j) + ".\t" + self.__plot_list[j].name.ljust(30))
+                  str(j+1) + ".\t" + self.__plot_list[j].name.ljust(30))
         if self.__max_plots % 2 == 1:
-            print("\t"+ " ".center(30) +
-                  str(self.__max_plots) + ".\t" + self.__plot_list[self.__max_plots-1].name.ljust(20))
+            print( (str(self.__max_plots) + ".  " + self.__plot_list[self.__max_plots-1].name).center(40) )
 
     def upgrade(self):
         match self.__max_plots:
