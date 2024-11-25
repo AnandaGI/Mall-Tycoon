@@ -12,7 +12,7 @@ from math import ceil
 class Mall:
     def __init__(self, name: str, recalls: int = 0, max_plots: int = 7):
         self.__name = name
-        self.__plot_list = [Plot(" ", "", 0) for i in range(0,25)]          #List of stores
+        self.__plot_list = [Plot("_", "", 0) for i in range(0,25)]          #List of stores
         self.__all_products = []        #All products that have been created during the course of the mall's lifespan
         self.__recalls = recalls
         self.__max_plots = max_plots    #Maximum number of plots in a mall, can be upgraded.
