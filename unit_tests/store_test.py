@@ -88,3 +88,61 @@ class TestRetailer(unittest.TestCase):
     def test_display_catalog(self, mocked_print):
         self.retailer.display_catalog()
         mocked_print.assert_called_with("\nSample Retailer Overview Page\n\"Sample Description\"\n" + "-"*20)
+
+class TestRestaurant(unittest.TestCase):
+    def setUp(self):
+        self.restaurant = Restaurant("Sample Restaurant", "Sample Description", 2000, 50)
+        self.restaurant.add_product(Item("Food", "SD", 9.99, 50))
+
+    def tearDown(self):
+        pass
+
+    def test_seats(self):
+        self.assertEqual(50, self.restaurant.seats)
+
+    def test_dict(self):
+        self.assertEqual({"class_type": "Restaurant", "name": "Sample Restaurant",
+                          "description": "Sample Description", "square_feet": 2000, "seats": 50},
+                         self.restaurant.__dict__())
+
+    #Display catalog only uses above functions that we know work (Also it doesn't really test well)
+
+    def test_add_prod(self):
+        self.restaurant.add_product(Item("New Food", "SD", 4.99, 50))
+        self.assertEqual(True, Item("New Food", "SD", 4.99, 50) in self.restaurant.list)
+        self.assertEqual("SD", self.restaurant.get_product(1).description)
+        self.assertEqual(4.99, self.restaurant.get_product(1).price)
+        self.assertEqual(50, self.restaurant.get_product(1).stock)
+
+    def test_add_prod_invalid(self):
+        self.restaurant.add_product(Service("New Service", "SD", 4.99))
+        self.assertEqual(False, Service("New Service", "SD", 4.99) in self.restaurant.list)
+
+    def test_set_seats(self):
+        self.restaurant.seats = 95
+        self.assertEqual(95, self.restaurant.seats)
+
+class TestDepartment(unittest.TestCase):
+    def setUp(self):
+        self.dep = Department("Sample Department", "Sample Description", 2000)
+        self.dep.add_product(Service("Service", "SD", 9.99))
+
+    def tearDown(self):
+        pass
+
+    def test_add_prod(self):
+        self.dep.add_product(Service("New Service", "SD", 4.99))
+        self.assertEqual(True, Item("New Service", "SD", 4.99,) in self.dep.list)
+        self.assertEqual("SD", self.dep.get_product(1).description)
+        self.assertEqual(4.99, self.dep.get_product(1).price)
+        self.assertEqual("8:00 AM - 7:00 PM", self.dep.get_product(1).time_range)
+
+    def test_add_prod_invalid(self):
+        self.dep.add_product(Item("New Item", "SD", 4.99))
+        self.assertEqual(False, Item("New Item", "SD", 4.99) in self.dep.list)
+
+    #Display Catalog not tested for similar reasons as above
+
+#Store does not need to be tested, only difference is display_catalog which, like the above,
+#cannot be easily tested and is composed of functions proven to work.
+

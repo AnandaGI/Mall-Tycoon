@@ -101,7 +101,7 @@ class Retailer(Plot):
 Restaurant - has a limited capacity and a menu of food items
 """
 class Restaurant(Retailer):
-    def __init__(self, name: str, description: str, sqr_feet: int, seats: int = 95):
+    def __init__(self, name: str, description: str, sqr_feet: int = 2000, seats: int = 95):
         super().__init__(name, description, sqr_feet)
         self.__seats = seats #How many guests can the restaurant seat?
 
